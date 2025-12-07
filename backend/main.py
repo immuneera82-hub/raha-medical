@@ -1,4 +1,4 @@
-cat > backend/main.py << 'EOF'
+
 from fastapi import FastAPI, Request, Query, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -7,10 +7,7 @@ from pathlib import Path
 import httpx
 import io
 
-from PIL import Image
-from PyPDF2 import PdfReader, PdfWriter
-from reportlab.pdfgen import canvas
-from reportlab.lib.utils import ImageReader
+
 
 app = FastAPI(title="Raha Medical API")
 
@@ -42,4 +39,3 @@ async def admin_panel(request: Request):
 @app.get("/api/health")
 async def health_check():
     return {"status": "healthy", "service": "Raha Medical API"}
-EOF

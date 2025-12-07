@@ -1,12 +1,29 @@
+cat > docker-compose.yml << 'EOF'
 version: '3.8'
 
 services:
   backend:
     build: ./backend
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend/static:/app/static
+    restart: unless-stopped
     env_file:
       - .env
+    volumes:
+      - ./backend/static:/app/static
+
+  caddy:
+    image: caddy:latest
     restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+
+volumes:
+  caddy_data:
+  caddy_config:
+EOF

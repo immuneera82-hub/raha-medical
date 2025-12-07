@@ -1,0 +1,211 @@
+cat > backend/templates/index.html << 'ENDOFFILE'
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raha Medical | رحلة علاجك تبدأ هنا</title>
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .hospital-logo { transition: all 0.3s ease; filter: grayscale(100%); opacity: 0.7; }
+        .hospital-logo:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.05); }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800" x-data="appData()">
+
+    <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="/" class="flex items-center">
+                    <img src="/static/images/logo.png" alt="Raha Logo" class="h-10 md:h-12 w-auto">
+                </a>
+
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#hospitals" class="text-gray-600 hover:text-teal-600 font-medium">المستشفيات</a>
+                    <a href="#treatments" class="text-gray-600 hover:text-teal-600 font-medium">العلاجات</a>
+                    <a href="#" class="text-gray-600 hover:text-teal-600 font-medium">المدونة</a>
+                </div>
+
+                <div class="hidden md:flex items-center gap-3">
+                    <template x-if="!user">
+                        <div class="flex gap-3">
+                            <button @click="authModalOpen = true" class="text-teal-700 font-bold hover:bg-teal-50 px-4 py-2 rounded-lg">تسجيل دخول</button>
+                            <button @click="authModalOpen = true" class="bg-teal-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-teal-700 shadow-md">حساب جديد</button>
+                        </div>
+                    </template>
+
+                    <template x-if="user">
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="flex items-center gap-3 hover:bg-gray-50 p-2 rounded-xl">
+                                <img :src="user.user_metadata.avatar_url || 'https://ui-avatars.com/api/?name=' + user.email" class="w-10 h-10 rounded-full border-2 border-teal-100">
+                                <div class="text-right hidden lg:block">
+                                    <p class="text-sm font-bold text-gray-800" x-text="user.user_metadata.full_name || user.email.split('@')[0]"></p>
+                                    <p class="text-xs text-teal-600">الملف الشخصي</p>
+                                </div>
+                            </button>
+                            
+                            <div x-show="open" @click.away="open = false" class="absolute left-0 mt-2 w-64 bg-white rounded-xl shadow-xl py-2 border z-50" x-cloak>
+                                <div class="px-4 py-3 border-b bg-gray-50">
+                                    <p class="text-sm text-gray-500">مرحباً،</p>
+                                    <p class="text-sm font-bold text-gray-900" x-text="user.user_metadata.full_name || user.email"></p>
+                                </div>
+                                
+                                <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    ملفي الشخصي
+                                </a>
+                                
+                                <template x-if="isAdmin">
+                                    <a href="/admin" class="flex items-center gap-3 px-4 py-3 text-sm text-purple-700 hover:bg-purple-50">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                        لوحة الأدمن
+                                    </a>
+                                </template>
+
+                                <hr class="my-1">
+                                
+                                <button @click="logout()" class="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                    تسجيل خروج
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-gray-600">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div x-show="mobileMenuOpen" class="md:hidden bg-white border-t">
+            <div class="flex flex-col p-4 space-y-3">
+                <a href="#hospitals" class="text-gray-600 font-medium py-2">المستشفيات</a>
+                <a href="#treatments" class="text-gray-600 font-medium py-2">العلاجات</a>
+                <hr>
+                <template x-if="!user">
+                    <div>
+                        <button @click="authModalOpen = true; mobileMenuOpen = false" class="w-full text-teal-700 font-bold py-2 border border-teal-100 rounded-lg mb-2">تسجيل دخول</button>
+                        <button @click="authModalOpen = true; mobileMenuOpen = false" class="w-full bg-teal-600 text-white font-bold py-2 rounded-lg">حساب جديد</button>
+                    </div>
+                </template>
+                <template x-if="user">
+                    <div>
+                        <a href="/dashboard" class="block w-full text-center text-teal-700 font-bold py-2 bg-teal-50 rounded-lg mb-2">ملفي الشخصي</a>
+                        <template x-if="isAdmin">
+                            <a href="/admin" class="block w-full text-center text-purple-700 font-bold py-2 bg-purple-50 rounded-lg mb-2">لوحة الأدمن</a>
+                        </template>
+                        <button @click="logout()" class="w-full text-red-600 font-bold py-2 border border-red-100 rounded-lg">تسجيل خروج</button>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-br from-teal-50 to-white py-16 md:py-24">
+        <div class="container mx-auto px-4 text-center">
+            <span class="inline-block py-1 px-3 rounded-full bg-teal-100 text-teal-700 text-sm font-bold mb-6">الرعاية الصحية التي تستحقينها</span>
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                رحلة علاجك في الهند <br> <span class="text-teal-600">أسهل وأكثر أماناً</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+                نربطك بأفضل المستشفيات في الهند مع خدمات متكاملة تشمل التأشيرة، الترجمة، والمتابعة الطبية.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button @click="if(user) window.location.href='/dashboard'; else authModalOpen = true" class="bg-teal-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-teal-700 shadow-lg">
+                    ابدئي رحلتك الآن
+                </button>
+                <a href="#hospitals" class="bg-white text-gray-700 border px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-50 shadow-sm">
+                    تصفح المستشفيات
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="hospitals" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">شركاؤنا من المستشفيات العالمية</h2>
+                <p class="text-gray-500">نتعاون مع نخبة المستشفيات في الهند</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 items-center justify-items-center">
+                <div class="w-full h-32 md:h-40 p-4 bg-gray-50 rounded-xl flex items-center justify-center hover:shadow-lg transition"><img src="/static/images/artemis.png" alt="Artemis" class="hospital-logo max-h-full max-w-full object-contain"></div>
+                <div class="w-full h-32 md:h-40 p-4 bg-gray-50 rounded-xl flex items-center justify-center hover:shadow-lg transition"><img src="/static/images/fortis.png" alt="Fortis" class="hospital-logo max-h-full max-w-full object-contain"></div>
+                <div class="w-full h-32 md:h-40 p-4 bg-gray-50 rounded-xl flex items-center justify-center hover:shadow-lg transition"><img src="/static/images/marengoasia.png" alt="Marengo" class="hospital-logo max-h-full max-w-full object-contain"></div>
+                <div class="w-full h-32 md:h-40 p-4 bg-gray-50 rounded-xl flex items-center justify-center hover:shadow-lg transition"><img src="/static/images/ckbirla.png" alt="CK Birla" class="hospital-logo max-h-full max-w-full object-contain"></div>
+                <div class="w-full h-32 md:h-40 p-4 bg-gray-50 rounded-xl flex items-center justify-center hover:shadow-lg transition"><img src="/static/images/medanta.jpg" alt="Medanta" class="hospital-logo max-h-full max-w-full object-contain"></div>
+                <div class="w-full h-32 md:h-40 p-4 bg-gray-50 rounded-xl flex items-center justify-center hover:shadow-lg transition"><img src="/static/images/scilogo.png" alt="SCI" class="hospital-logo max-h-full max-w-full object-contain"></div>
+                <div class="w-full h-32 md:h-40 p-4 bg-gray-50 rounded-xl flex items-center justify-center hover:shadow-lg transition"><img src="/static/images/maxhealthcare.jpg" alt="Max" class="hospital-logo max-h-full max-w-full object-contain"></div>
+            </div>
+        </div>
+    </section>
+
+    <div x-show="authModalOpen" class="fixed inset-0 z-[100] overflow-y-auto" x-cloak>
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75" @click="authModalOpen = false"></div>
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative z-10">
+                <h3 class="text-xl font-bold text-gray-900 mb-4 text-center">تسجيل الدخول</h3>
+                <button onclick="signInWithGoogle()" class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 font-bold py-3 px-4 rounded-xl hover:bg-gray-50">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="Google">
+                    <span>المتابعة باستخدام Google</span>
+                </button>
+                <button @click="authModalOpen = false" class="mt-4 w-full text-gray-500 text-sm">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://rusuwljflrremkszgstn.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1c3V3bGpmbHJyZW1rc3pnc3RuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0Njk3NjgsImV4cCI6MjA3MDA0NTc2OH0.DFioJz2FNQwpzFEilgagcAFtvQftCkVn4ts-yTjT5vU'
+        const sbClient = supabase.createClient(supabaseUrl, supabaseKey)
+
+        function appData() {
+            return {
+                mobileMenuOpen: false,
+                authModalOpen: false,
+                user: null,
+                isAdmin: false,
+                
+                async init() {
+                    const { data: { session } } = await sbClient.auth.getSession();
+                    if (session) {
+                        this.user = session.user;
+                        await this.checkAdmin();
+                    }
+                    
+                    sbClient.auth.onAuthStateChange(async (event, session) => {
+                        this.user = session ? session.user : null;
+                        if (session) await this.checkAdmin();
+                    });
+                },
+                
+                async checkAdmin() {
+                    if (!this.user) return;
+                    const { data } = await sbClient.from('profiles').select('is_admin').eq('id', this.user.id).single();
+                    this.isAdmin = data?.is_admin || false;
+                },
+                
+                async logout() {
+                    await sbClient.auth.signOut();
+                    window.location.href = '/';
+                }
+            }
+        }
+
+        async function signInWithGoogle() {
+            await sbClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: window.location.origin }
+            });
+        }
+    </script>
+</body>
+</html>
+ENDOFFILE

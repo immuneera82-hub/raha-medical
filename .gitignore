@@ -1,0 +1,39 @@
+# Environment variables - مهم جداً
+.env
+.env.local
+.env.production
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Docker volumes
+data/
+
+# Uploaded files (if sensitive)
+uploads/
+
+# SSL certificates
+*.pem
+*.key
+*.crt

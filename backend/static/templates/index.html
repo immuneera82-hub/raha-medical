@@ -50,6 +50,37 @@
         .float-animation {
             animation: float 3s ease-in-out infinite;
         }
+
+        /* Marquee Animation for Hospitals */
+        @keyframes marquee {
+            0% {
+                transform: translateX(0%);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .marquee-container {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .marquee-track {
+            display: flex;
+            animation: marquee 20s linear infinite;
+            width: max-content;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        .marquee-item {
+            flex-shrink: 0;
+            padding: 0 2rem;
+        }
     </style>
 </head>
 
@@ -153,9 +184,9 @@
                 الرعاية الصحية التي تستحقينها
             </span>
 
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-8 leading-relaxed">
-                رحلة علاجك في الهند <br class="hidden md:block" />
-                <span class="text-teal-800 inline-block mt-2">أسهل وأكثر أماناً</span>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-8">
+                <span class="block mb-4">رحلة علاجك في الهند</span>
+                <span class="block text-teal-800">أسهل وأكثر أماناً</span>
             </h1>
 
             <p class="text-xl md:text-2xl text-gray-900 mb-12 font-bold max-w-5xl mx-auto leading-relaxed">
@@ -179,42 +210,110 @@
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-4">شركاؤنا من المستشفيات العالمية</h2>
             <p class="text-gray-600 text-center mb-12">نتعاون مع نخبة المستشفيات في الهند</p>
+        </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <div
-                    class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-32 hover:shadow-lg transition-shadow">
-                    <img src="/static/images/Medanta.png" alt="Medanta"
-                        class="hospital-logo max-h-20 max-w-full object-contain">
+        <!-- Marquee Hospitals Slider -->
+        <div class="marquee-container">
+            <div class="marquee-track">
+                <!-- First set of logos -->
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/Medanta.png" alt="Medanta"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
                 </div>
-                <div
-                    class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-32 hover:shadow-lg transition-shadow">
-                    <img src="/static/images/CK-BIRLA.png" alt="CK Birla"
-                        class="hospital-logo max-h-20 max-w-full object-contain">
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/CK-BIRLA.png" alt="CK Birla"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
                 </div>
-                <div
-                    class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-32 hover:shadow-lg transition-shadow">
-                    <img src="/static/images/Marengo-Asia.png" alt="Marengo Asia"
-                        class="hospital-logo max-h-20 max-w-full object-contain">
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/Marengo-Asia.png" alt="Marengo Asia"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
                 </div>
-                <div
-                    class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-32 hover:shadow-lg transition-shadow">
-                    <img src="/static/images/Fortis.png" alt="Fortis"
-                        class="hospital-logo max-h-20 max-w-full object-contain">
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/Fortis.png" alt="Fortis"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
                 </div>
-                <div
-                    class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-32 hover:shadow-lg transition-shadow">
-                    <img src="/static/images/Artemis.png" alt="Artemis"
-                        class="hospital-logo max-h-20 max-w-full object-contain">
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/Artemis.png" alt="Artemis"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
                 </div>
-                <div
-                    class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-32 hover:shadow-lg transition-shadow">
-                    <img src="/static/images/Max-Healthcare.png" alt="Max Healthcare"
-                        class="hospital-logo max-h-20 max-w-full object-contain">
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/Max-Healthcare.png" alt="Max Healthcare"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
                 </div>
-                <div
-                    class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-32 hover:shadow-lg transition-shadow">
-                    <img src="/static/images/sci-logo.png" alt="SCI IVF"
-                        class="hospital-logo max-h-20 max-w-full object-contain">
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/sci-logo.png" alt="SCI IVF"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
+                </div>
+                <!-- Duplicate set for seamless loop -->
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/Medanta.png" alt="Medanta"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
+                </div>
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/CK-BIRLA.png" alt="CK Birla"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
+                </div>
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/Marengo-Asia.png" alt="Marengo Asia"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
+                </div>
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/Fortis.png" alt="Fortis"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
+                </div>
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/Artemis.png" alt="Artemis"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
+                </div>
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/Max-Healthcare.png" alt="Max Healthcare"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
+                </div>
+                <div class="marquee-item">
+                    <div
+                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        <img src="/static/images/sci-logo.png" alt="SCI IVF"
+                            class="hospital-logo max-h-16 max-w-full object-contain">
+                    </div>
                 </div>
             </div>
         </div>

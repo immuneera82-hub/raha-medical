@@ -140,36 +140,37 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="gradient-hero py-12 md:py-20 overflow-hidden">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-12">
-                <div class="w-full md:w-1/2 text-center md:text-right z-10">
+    <section class="relative min-h-[600px] flex items-center overflow-hidden">
+        <!-- Background Image & Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="/static/images/hero-doctor.png" alt="Raha Medical" class="w-full h-full object-cover object-top">
+            <div class="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent/10"></div>
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10 py-12 md:py-20">
+            <div class="w-full md:w-2/3 lg:w-1/2">
+                <div class="bg-white/40 backdrop-blur-md p-8 md:p-10 rounded-3xl border border-white/50 shadow-sm">
                     <span
-                        class="inline-block bg-teal-100 text-teal-700 px-4 py-2 rounded-full text-sm font-bold mb-6">الرعاية
+                        class="inline-block bg-teal-600 text-white px-4 py-2 rounded-full text-sm font-bold mb-6">الرعاية
                         الصحية التي تستحقينها</span>
-                    <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-4 leading-tight">رحلة علاجك في الهند
-                        <br><span class="text-teal-600">أسهل وأكثر أماناً</span></h1>
-                    <p class="text-lg text-gray-600 mb-8 max-w-lg mx-auto md:mx-0">نربطك بأفضل المستشفيات في الهند مع
-                        خدمات متكاملة تشمل التأشيرة، الترجمة، والمتابعة الطبية.</p>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                        رحلة علاجك في الهند
+                        <br>
+                        <span class="text-teal-700">أسهل وأكثر أماناً</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-800 mb-8 font-medium leading-relaxed">
+                        نربطك بأفضل المستشفيات في الهند مع خدمات متكاملة تشمل التأشيرة، الترجمة، والمتابعة الطبية.
+                    </p>
 
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <div class="flex flex-col sm:flex-row gap-4">
                         <button @click="showConsultationModal()"
-                            class="bg-teal-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-teal-700 shadow-lg transform hover:-translate-y-1 transition">ابدئي
-                            رحلتك الآن</button>
+                            class="bg-teal-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-teal-700 shadow-lg transform hover:-translate-y-1 transition text-center">
+                            ابدئي رحلتك الآن
+                        </button>
                         <a href="#hospitals"
-                            class="border-2 border-teal-600 text-teal-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-teal-50 transition">تصفح
-                            المستشفيات</a>
-                    </div>
-                </div>
-
-                <div class="w-full md:w-1/2 relative">
-                    <div class="relative z-10 float-animation">
-                        <img src="/static/images/hero-doctor.png" alt="Raha Team"
-                            class="w-full h-auto rounded-3xl shadow-2xl border-4 border-white/50 backdrop-blur-sm">
-                    </div>
-                    <!-- Decorative backdrops -->
-                    <div
-                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-teal-200/20 rounded-full blur-3xl -z-10">
+                            class="bg-white/90 text-teal-700 border-2 border-teal-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-teal-50 transition text-center backdrop-blur-sm">
+                            تصفح المستشفيات
+                        </a>
                     </div>
                 </div>
             </div>
@@ -509,104 +510,105 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyFzZSIsInJlZiI6InluZmNpbHRremdleG5mbXRqcWdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzMjc2NzcsImV4cCI6MjA0ODkwMzY3N30.bCQT0lKMDsxrLXPgK_ynJvPIwVfGdpOWr-A0t5y8sQ8';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        return {
-            user: null,
-            authModalOpen: false,
-            authMode: 'login',
-            mobileMenuOpen: false,
-            consultationModalOpen: false,
-            email: '',
-            password: '',
-            fullName: '',
-            authError: '',
-            showToast: false,
-            toastMessage: '',
-            consultation: {
-                name: '',
-                phone: '',
+        function appData() {
+            return {
+                user: null,
+                authModalOpen: false,
+                authMode: 'login',
+                mobileMenuOpen: false,
+                consultationModalOpen: false,
                 email: '',
-                treatment: '',
-                description: ''
-            },
+                password: '',
+                fullName: '',
+                authError: '',
+                showToast: false,
+                toastMessage: '',
+                consultation: {
+                    name: '',
+                    phone: '',
+                    email: '',
+                    treatment: '',
+                    description: ''
+                },
 
-            async init() {
-                const { data: { session } } = await supabase.auth.getSession();
-                if (session) this.user = session.user;
+                async init() {
+                    const { data: { session } } = await supabase.auth.getSession();
+                    if (session) this.user = session.user;
 
-                supabase.auth.onAuthStateChange((event, session) => {
-                    this.user = session?.user || null;
-                    if (event === 'SIGNED_IN') {
+                    supabase.auth.onAuthStateChange((event, session) => {
+                        this.user = session?.user || null;
+                        if (event === 'SIGNED_IN') {
+                            this.authModalOpen = false;
+                            this.showNotification('تم تسجيل الدخول بنجاح!');
+                        }
+                    });
+                },
+
+                showAuthModal(mode) {
+                    this.authMode = mode;
+                    this.authModalOpen = true;
+                    this.authError = '';
+                },
+
+                showConsultationModal() {
+                    this.consultationModalOpen = true;
+                    if (this.user) {
+                        this.consultation.email = this.user.email;
+                        this.consultation.name = this.user.user_metadata?.full_name || '';
+                    }
+                },
+
+                async loginWithEmail() {
+                    this.authError = '';
+                    const { error } = await supabase.auth.signInWithPassword({
+                        email: this.email,
+                        password: this.password
+                    });
+                    if (error) this.authError = error.message;
+                },
+
+                async registerWithEmail() {
+                    this.authError = '';
+                    const { error } = await supabase.auth.signUp({
+                        email: this.email,
+                        password: this.password,
+                        options: {
+                            data: { full_name: this.fullName }
+                        }
+                    });
+                    if (error) {
+                        this.authError = error.message;
+                    } else {
+                        this.showNotification('تم إنشاء الحساب! يرجى تأكيد بريدك الإلكتروني.');
                         this.authModalOpen = false;
-                        this.showNotification('تم تسجيل الدخول بنجاح!');
                     }
-                });
-            },
+                },
 
-            showAuthModal(mode) {
-                this.authMode = mode;
-                this.authModalOpen = true;
-                this.authError = '';
-            },
+                async loginWithGoogle() {
+                    await supabase.auth.signInWithOAuth({
+                        provider: 'google',
+                        options: { redirectTo: window.location.origin }
+                    });
+                },
 
-            showConsultationModal() {
-                this.consultationModalOpen = true;
-                if (this.user) {
-                    this.consultation.email = this.user.email;
-                    this.consultation.name = this.user.user_metadata?.full_name || '';
+                async logout() {
+                    await supabase.auth.signOut();
+                    this.showNotification('تم تسجيل الخروج');
+                },
+
+                async submitConsultation() {
+                    this.showNotification('تم إرسال طلبك بنجاح! سنتواصل معك قريباً.');
+                    this.consultationModalOpen = false;
+                    this.consultation = { name: '', phone: '', email: '', treatment: '', description: '' };
+                },
+
+                showNotification(message) {
+                    this.toastMessage = message;
+                    this.showToast = true;
+                    setTimeout(() => this.showToast = false, 3000);
                 }
-            },
-
-            async loginWithEmail() {
-                this.authError = '';
-                const { error } = await supabase.auth.signInWithPassword({
-                    email: this.email,
-                    password: this.password
-                });
-                if (error) this.authError = error.message;
-            },
-
-            async registerWithEmail() {
-                this.authError = '';
-                const { error } = await supabase.auth.signUp({
-                    email: this.email,
-                    password: this.password,
-                    options: {
-                        data: { full_name: this.fullName }
-                    }
-                });
-                if (error) {
-                    this.authError = error.message;
-                } else {
-                    this.showNotification('تم إنشاء الحساب! يرجى تأكيد بريدك الإلكتروني.');
-                    this.authModalOpen = false;
-                }
-            },
-
-            async loginWithGoogle() {
-                await supabase.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: { redirectTo: window.location.origin }
-                });
-            },
-
-            async logout() {
-                await supabase.auth.signOut();
-                this.showNotification('تم تسجيل الخروج');
-            },
-
-            async submitConsultation() {
-                this.showNotification('تم إرسال طلبك بنجاح! سنتواصل معك قريباً.');
-                this.consultationModalOpen = false;
-                this.consultation = { name: '', phone: '', email: '', treatment: '', description: '' };
-            },
-
-            showNotification(message) {
-                this.toastMessage = message;
-                this.showToast = true;
-                setTimeout(() => this.showToast = false, 3000);
             }
         }
-            }
     </script>
 </body>
 

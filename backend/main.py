@@ -29,6 +29,10 @@ async def home(request: Request):
 async def dashboard(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
+@app.get("/treatments", response_class=HTMLResponse)
+async def treatments(request: Request):
+    return templates.TemplateResponse("treatments.html", {"request": request})
+
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_panel(request: Request):
     return templates.TemplateResponse("admin.html", {"request": request})

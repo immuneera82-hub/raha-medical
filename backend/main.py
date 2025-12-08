@@ -33,6 +33,10 @@ async def dashboard(request: Request):
 async def treatments(request: Request):
     return templates.TemplateResponse("treatments.html", {"request": request})
 
+@app.get("/privacy-policy", response_class=HTMLResponse)
+async def privacy_policy(request: Request):
+    return templates.TemplateResponse("privacy-policy.html", {"request": request})
+
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_panel(request: Request):
     return templates.TemplateResponse("admin.html", {"request": request})

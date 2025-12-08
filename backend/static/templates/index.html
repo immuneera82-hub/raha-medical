@@ -4,10 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="رحا ميديكال - شريكك الموثوق للعلاج في الهند. نربطك بأفضل المستشفيات مع خدمات شاملة تشمل التأشيرة والترجمة والمتابعة الطبية.">
+    <meta name="keywords" content="علاج في الهند، سياحة طبية، أطفال الأنابيب، علاج السرطان، مستشفيات الهند">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Raha Medical">
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Raha Medical | رحلة علاجك تبدأ هنا">
+    <meta property="og:description" content="شريكك الموثوق للعلاج في الهند - خدمات طبية متكاملة">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ar_IQ">
     <title>Raha Medical | رحلة علاجك تبدأ هنا</title>
     <link rel="icon" type="image/png" href="/static/images/favicon.png">
+    <link rel="canonical" href="https://rahamedical.com">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
@@ -51,26 +67,27 @@
             animation: float 3s ease-in-out infinite;
         }
 
-        /* Marquee Animation for Hospitals */
-        @keyframes marquee {
+        /* Seamless Marquee Animation */
+        @keyframes scroll {
             0% {
-                transform: translateX(0%);
+                transform: translateX(0);
             }
 
             100% {
-                transform: translateX(-50%);
+                transform: translateX(calc(-250px * 7));
             }
         }
 
         .marquee-container {
             overflow: hidden;
             width: 100%;
+            background: linear-gradient(90deg, white 0%, transparent 5%, transparent 95%, white 100%);
         }
 
         .marquee-track {
             display: flex;
-            animation: marquee 20s linear infinite;
-            width: max-content;
+            width: calc(250px * 14);
+            animation: scroll 25s linear infinite;
         }
 
         .marquee-track:hover {
@@ -79,7 +96,39 @@
 
         .marquee-item {
             flex-shrink: 0;
-            padding: 0 2rem;
+            width: 250px;
+            padding: 0 1rem;
+        }
+
+        .hospital-card {
+            transition: all 0.3s ease;
+        }
+
+        .hospital-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .hospital-card:hover .hospital-logo {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        /* Trust Counter Animation */
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-item {
+            animation: countUp 0.6s ease-out forwards;
         }
     </style>
 </head>
@@ -206,114 +255,204 @@
         </div>
     </section>
 
-    <section id="hospitals" class="py-16 bg-white">
+    <!-- Trust Statistics Section -->
+    <section class="py-12 bg-gradient-to-r from-teal-700 to-teal-900">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-4">شركاؤنا من المستشفيات العالمية</h2>
-            <p class="text-gray-600 text-center mb-12">نتعاون مع نخبة المستشفيات في الهند</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+                <div class="stat-item" style="animation-delay: 0.1s">
+                    <div class="text-4xl md:text-5xl font-extrabold mb-2">+500</div>
+                    <div class="text-teal-200 font-medium">مريض تم علاجه</div>
+                </div>
+                <div class="stat-item" style="animation-delay: 0.2s">
+                    <div class="text-4xl md:text-5xl font-extrabold mb-2">15+</div>
+                    <div class="text-teal-200 font-medium">مستشفى شريك</div>
+                </div>
+                <div class="stat-item" style="animation-delay: 0.3s">
+                    <div class="text-4xl md:text-5xl font-extrabold mb-2">98%</div>
+                    <div class="text-teal-200 font-medium">نسبة رضا المرضى</div>
+                </div>
+                <div class="stat-item" style="animation-delay: 0.4s">
+                    <div class="text-4xl md:text-5xl font-extrabold mb-2">24/7</div>
+                    <div class="text-teal-200 font-medium">دعم متواصل</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hospitals Section -->
+    <section id="hospitals" class="py-20 bg-white">
+        <div class="container mx-auto px-4 mb-12">
+            <span class="block text-teal-600 font-bold text-center mb-3">شركاؤنا في النجاح</span>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-center text-gray-900 mb-4">المستشفيات العالمية المعتمدة
+            </h2>
+            <p class="text-gray-600 text-center text-lg max-w-2xl mx-auto">نتعاون مع أرقى المستشفيات المعتمدة دولياً في
+                الهند لضمان حصولك على أفضل رعاية طبية</p>
         </div>
 
-        <!-- Marquee Hospitals Slider -->
-        <div class="marquee-container">
+        <!-- Seamless Marquee -->
+        <div class="marquee-container py-4">
             <div class="marquee-track">
-                <!-- First set of logos -->
+                <!-- Hospital 1 -->
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/Medanta.png" alt="Medanta"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">ميدانتا</span>
+                        <span class="text-gray-500 text-xs">دلهي</span>
                     </div>
                 </div>
+                <!-- Hospital 2 -->
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/CK-BIRLA.png" alt="CK Birla"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">سي كي بيرلا</span>
+                        <span class="text-gray-500 text-xs">كولكاتا</span>
                     </div>
                 </div>
+                <!-- Hospital 3 -->
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/Marengo-Asia.png" alt="Marengo Asia"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">مارينغو آسيا</span>
+                        <span class="text-gray-500 text-xs">غورغاون</span>
                     </div>
                 </div>
+                <!-- Hospital 4 -->
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/Fortis.png" alt="Fortis"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">فورتيس</span>
+                        <span class="text-gray-500 text-xs">مومباي</span>
                     </div>
                 </div>
+                <!-- Hospital 5 -->
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/Artemis.png" alt="Artemis"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">أرتميس</span>
+                        <span class="text-gray-500 text-xs">غورغاون</span>
                     </div>
                 </div>
+                <!-- Hospital 6 -->
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/Max-Healthcare.png" alt="Max Healthcare"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">ماكس هيلثكير</span>
+                        <span class="text-gray-500 text-xs">نيودلهي</span>
                     </div>
                 </div>
+                <!-- Hospital 7 -->
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/sci-logo.png" alt="SCI IVF"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">SCI IVF</span>
+                        <span class="text-gray-500 text-xs">نيودلهي</span>
                     </div>
                 </div>
-                <!-- Duplicate set for seamless loop -->
+                <!-- Duplicate for seamless loop -->
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/Medanta.png" alt="Medanta"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">ميدانتا</span>
+                        <span class="text-gray-500 text-xs">دلهي</span>
                     </div>
                 </div>
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/CK-BIRLA.png" alt="CK Birla"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">سي كي بيرلا</span>
+                        <span class="text-gray-500 text-xs">كولكاتا</span>
                     </div>
                 </div>
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/Marengo-Asia.png" alt="Marengo Asia"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">مارينغو آسيا</span>
+                        <span class="text-gray-500 text-xs">غورغاون</span>
                     </div>
                 </div>
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/Fortis.png" alt="Fortis"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">فورتيس</span>
+                        <span class="text-gray-500 text-xs">مومباي</span>
                     </div>
                 </div>
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/Artemis.png" alt="Artemis"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">أرتميس</span>
+                        <span class="text-gray-500 text-xs">غورغاون</span>
                     </div>
                 </div>
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/Max-Healthcare.png" alt="Max Healthcare"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">ماكس هيلثكير</span>
+                        <span class="text-gray-500 text-xs">نيودلهي</span>
                     </div>
                 </div>
                 <div class="marquee-item">
                     <div
-                        class="bg-gray-50 rounded-xl p-6 flex items-center justify-center h-28 w-48 hover:shadow-lg transition-shadow">
+                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
                         <img src="/static/images/sci-logo.png" alt="SCI IVF"
-                            class="hospital-logo max-h-16 max-w-full object-contain">
+                            class="hospital-logo h-14 object-contain mb-3">
+                        <span class="text-gray-800 font-bold text-sm">SCI IVF</span>
+                        <span class="text-gray-500 text-xs">نيودلهي</span>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="container mx-auto px-4 mt-12">
+            <div class="flex flex-wrap justify-center items-center gap-6 text-gray-500 text-sm">
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span>مستشفيات معتمدة دولياً</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span>شهادة JCI للجودة</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>ضمان أفضل الأسعار</span>
                 </div>
             </div>
         </div>

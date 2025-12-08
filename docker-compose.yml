@@ -1,4 +1,4 @@
-cat > docker-compose.yml << 'EOF'
+
 version: '3.8'
 
 services:
@@ -26,4 +26,3 @@ services:
 volumes:
   caddy_data:
   caddy_config:
-EOF

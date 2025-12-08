@@ -1,0 +1,11 @@
+{
+    email immuneera82@gmail.com
+}
+
+rahamedical.com {
+    reverse_proxy backend:8000
+}
+
+www.rahamedical.com {
+    redir https://rahamedical.com{uri}
+}

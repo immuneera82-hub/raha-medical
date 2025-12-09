@@ -1,6 +1,6 @@
-cat > backend/templates/dashboard.html << 'ENDOFFILE'
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,11 +11,30 @@ cat > backend/templates/dashboard.html << 'ENDOFFILE'
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        body { font-family: 'Cairo', sans-serif; }
-        [x-cloak] { display: none !important; }
-        .tab-active { background-color: #f0fdfa; color: #0f766e; border-right: 3px solid #0f766e; }
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .tab-active {
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+            color: #0f766e;
+            border-right: 4px solid #0f766e;
+        }
+
+        .upload-zone {
+            transition: all 0.3s ease;
+        }
+
+        .upload-zone:hover {
+            transform: scale(1.02);
+        }
     </style>
 </head>
+
 <body class="bg-gray-100" x-data="dashboardApp()">
 
     <div x-show="loading" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
@@ -24,165 +43,342 @@ cat > backend/templates/dashboard.html << 'ENDOFFILE'
     </div>
 
     <div x-show="!loading" x-cloak class="min-h-screen flex flex-col md:flex-row">
-        
+
+        <!-- Sidebar -->
         <aside class="w-full md:w-72 bg-white shadow-lg md:flex flex-col hidden">
             <div class="p-6 border-b">
                 <a href="/"><img src="/static/images/logo.png" class="h-10" alt="Logo"></a>
             </div>
-            
+
+            <!-- User Info -->
+            <div class="p-4 border-b bg-gradient-to-r from-teal-50 to-white">
+                <div class="flex items-center gap-3">
+                    <img :src="profile.avatar_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(profile.full_name || 'User')&background=0d9488&color=fff"
+                        class="w-12 h-12 rounded-full border-2 border-teal-200">
+                    <div>
+                        <p class="font-bold text-gray-800" x-text="profile.full_name || 'مستخدم'"></p>
+                        <p class="text-xs text-teal-600 font-mono" x-text="profile.patient_id"></p>
+                    </div>
+                </div>
+            </div>
+
             <nav class="flex-1 p-4 space-y-2">
-                <button @click="currentTab = 'profile'" :class="currentTab === 'profile' ? 'tab-active' : 'text-gray-600 hover:bg-gray-50'" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    تعديل الحساب
+                <button @click="currentTab = 'profile'"
+                    :class="currentTab === 'profile' ? 'tab-active' : 'text-gray-600 hover:bg-gray-50'"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    البيانات الشخصية
                 </button>
-                
-                <button @click="currentTab = 'reports'" :class="currentTab === 'reports' ? 'tab-active' : 'text-gray-600 hover:bg-gray-50'" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+
+                <button @click="currentTab = 'identity'"
+                    :class="currentTab === 'identity' ? 'tab-active' : 'text-gray-600 hover:bg-gray-50'"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                    </svg>
+                    صورة الهوية
+                </button>
+
+                <button @click="currentTab = 'reports'"
+                    :class="currentTab === 'reports' ? 'tab-active' : 'text-gray-600 hover:bg-gray-50'"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
                     التقارير الطبية
                 </button>
-                
-                <button @click="currentTab = 'hospital'" :class="currentTab === 'hospital' ? 'tab-active' : 'text-gray-600 hover:bg-gray-50'" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                    المستشفيات
-                </button>
             </nav>
-            
-            <div class="p-4 border-t">
-                <a href="/" class="flex items-center gap-2 text-gray-500 hover:text-teal-600 py-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+
+            <div class="p-4 border-t space-y-2">
+                <a href="/" class="flex items-center gap-2 text-gray-500 hover:text-teal-600 py-2 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
                     الرئيسية
                 </a>
-                <button @click="logout()" class="flex items-center gap-2 text-red-500 hover:text-red-700 py-2 w-full">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                <button @click="logout()"
+                    class="flex items-center gap-2 text-red-500 hover:text-red-700 py-2 w-full transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
                     خروج
                 </button>
             </div>
         </aside>
 
-        <div class="md:hidden bg-white shadow-sm p-4 flex justify-between items-center">
+        <!-- Mobile Header -->
+        <div class="md:hidden bg-white shadow-sm p-4 flex justify-between items-center sticky top-0 z-40">
             <a href="/"><img src="/static/images/logo.png" class="h-8" alt="Logo"></a>
             <div class="flex gap-2">
-                <button @click="currentTab = 'profile'" :class="currentTab === 'profile' ? 'bg-teal-100 text-teal-700' : 'bg-gray-100'" class="p-2 rounded-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <button @click="currentTab = 'profile'"
+                    :class="currentTab === 'profile' ? 'bg-teal-100 text-teal-700' : 'bg-gray-100'"
+                    class="p-2 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
                 </button>
-                <button @click="currentTab = 'reports'" :class="currentTab === 'reports' ? 'bg-teal-100 text-teal-700' : 'bg-gray-100'" class="p-2 rounded-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <button @click="currentTab = 'identity'"
+                    :class="currentTab === 'identity' ? 'bg-teal-100 text-teal-700' : 'bg-gray-100'"
+                    class="p-2 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" />
+                    </svg>
                 </button>
-                <button @click="currentTab = 'hospital'" :class="currentTab === 'hospital' ? 'bg-teal-100 text-teal-700' : 'bg-gray-100'" class="p-2 rounded-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                <button @click="currentTab = 'reports'"
+                    :class="currentTab === 'reports' ? 'bg-teal-100 text-teal-700' : 'bg-gray-100'"
+                    class="p-2 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
                 </button>
             </div>
         </div>
 
+        <!-- Main Content -->
         <main class="flex-1 p-4 md:p-10 overflow-y-auto">
-            
+
+            <!-- Profile Tab -->
             <div x-show="currentTab === 'profile'">
-                <h1 class="text-2xl font-bold mb-6">تعديل الحساب</h1>
-                
+                <div class="flex items-center justify-between mb-6">
+                    <h1 class="text-2xl font-bold">البيانات الشخصية</h1>
+                    <span class="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm font-medium"
+                        x-text="profile.patient_id"></span>
+                </div>
+
                 <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
-                    <div class="flex items-center gap-4 mb-6">
-                        <img :src="profile.avatar_url || 'https://ui-avatars.com/api/?name=User'" class="w-16 h-16 rounded-full border-4 border-teal-50">
+                    <div class="flex items-center gap-4 mb-6 pb-6 border-b">
+                        <img :src="profile.avatar_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(profile.full_name || 'User')&background=0d9488&color=fff&size=128'"
+                            class="w-20 h-20 rounded-full border-4 border-teal-50">
                         <div>
                             <h2 class="text-xl font-bold" x-text="profile.full_name"></h2>
-                            <p class="text-gray-500 text-sm">رقم الملف: <span class="font-mono text-teal-600" x-text="profile.patient_id"></span></p>
+                            <p class="text-gray-500 text-sm" x-text="profile.email"></p>
                         </div>
                     </div>
-                    
-                    <div class="grid md:grid-cols-2 gap-4">
+
+                    <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">الاسم الكامل</label>
-                            <input type="text" x-model="profile.full_name" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">الاسم الأول</label>
+                            <input type="text" x-model="profile.first_name"
+                                class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-teal-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">الاسم الأخير</label>
+                            <input type="text" x-model="profile.last_name"
+                                class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-teal-500 outline-none">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">البريد الإلكتروني</label>
-                            <input type="email" :value="profile.email" readonly class="w-full px-4 py-3 bg-gray-50 border rounded-lg text-gray-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف</label>
-                            <input type="tel" x-model="profile.phone" placeholder="+964" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none">
+                            <input type="email" :value="profile.email" readonly
+                                class="w-full px-4 py-3 bg-gray-50 border rounded-xl text-gray-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">الدولة</label>
-                            <select x-model="profile.country" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none">
+                            <select x-model="profile.country" @change="updateProfilePhoneCode()"
+                                class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-teal-500 outline-none bg-white">
                                 <option value="">اختر الدولة</option>
-                                <option value="العراق">العراق</option>
-                                <option value="السعودية">السعودية</option>
-                                <option value="الإمارات">الإمارات</option>
-                                <option value="الكويت">الكويت</option>
-                                <option value="قطر">قطر</option>
-                                <option value="البحرين">البحرين</option>
-                                <option value="عمان">عمان</option>
-                                <option value="الأردن">الأردن</option>
-                                <option value="لبنان">لبنان</option>
-                                <option value="مصر">مصر</option>
-                                <option value="اليمن">اليمن</option>
+                                <option value="IQ">🇮🇶 العراق</option>
+                                <option value="SA">🇸🇦 السعودية</option>
+                                <option value="AE">🇦🇪 الإمارات</option>
+                                <option value="KW">🇰🇼 الكويت</option>
+                                <option value="QA">🇶🇦 قطر</option>
+                                <option value="BH">🇧🇭 البحرين</option>
+                                <option value="OM">🇴🇲 عُمان</option>
+                                <option value="JO">🇯🇴 الأردن</option>
+                                <option value="LB">🇱🇧 لبنان</option>
+                                <option value="SY">🇸🇾 سوريا</option>
+                                <option value="PS">🇵🇸 فلسطين</option>
+                                <option value="EG">🇪🇬 مصر</option>
+                                <option value="SD">🇸🇩 السودان</option>
+                                <option value="YE">🇾🇪 اليمن</option>
+                                <option value="IR">🇮🇷 إيران</option>
+                                <option value="TR">🇹🇷 تركيا</option>
                             </select>
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">العنوان</label>
-                            <input type="text" x-model="profile.address" placeholder="المدينة، المنطقة" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف / واتساب</label>
+                            <div class="flex gap-2">
+                                <div class="w-24 flex-shrink-0">
+                                    <input type="text" x-model="phoneCode" readonly
+                                        class="w-full px-3 py-3 border rounded-xl bg-gray-50 text-center font-medium">
+                                </div>
+                                <input type="tel" x-model="profile.phone"
+                                    class="flex-1 px-4 py-3 border rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
+                                    dir="ltr">
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="mt-6 flex justify-end">
-                        <button @click="saveProfile()" class="bg-teal-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-teal-700">حفظ التغييرات</button>
+
+                    <div class="mt-6 flex justify-end gap-3">
+                        <button @click="saveProfile()"
+                            class="bg-teal-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-teal-700 transition shadow-lg">
+                            حفظ التغييرات
+                        </button>
                     </div>
                 </div>
             </div>
 
+            <!-- Identity Tab -->
+            <div x-show="currentTab === 'identity'">
+                <h1 class="text-2xl font-bold mb-6">صورة الهوية</h1>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+                        <div class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-amber-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <div>
+                                <h4 class="font-bold text-amber-800">لماذا نحتاج صورة الهوية؟</h4>
+                                <p class="text-amber-700 text-sm mt-1">تُستخدم صورة الهوية للحصول على خطاب الدعوة أو
+                                    تأشيرة العلاج من المستشفى عند بدء رحلة العلاج.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <template x-if="!identityDocument">
+                        <div class="upload-zone border-2 border-dashed border-teal-300 rounded-2xl p-12 text-center bg-teal-50 hover:bg-teal-100 cursor-pointer"
+                            @click="$refs.identityInput.click()">
+                            <input type="file" x-ref="identityInput" @change="uploadIdentity($event)" accept="image/*"
+                                class="hidden">
+                            <div
+                                class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                <svg class="w-10 h-10 text-teal-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-teal-800 mb-2">رفع صورة الهوية</h3>
+                            <p class="text-gray-600">جواز السفر أو البطاقة الشخصية</p>
+                            <p class="text-sm text-gray-500 mt-2">PNG, JPG حتى 5MB</p>
+                        </div>
+                    </template>
+
+                    <template x-if="identityDocument">
+                        <div class="bg-green-50 border border-green-200 rounded-2xl p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center">
+                                        <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-green-800" x-text="identityDocument.file_name"></p>
+                                        <p class="text-sm text-green-600">تم الرفع بتاريخ: <span
+                                                x-text="new Date(identityDocument.created_at).toLocaleDateString('ar')"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a :href="identityDocument.file_url" target="_blank"
+                                        class="px-4 py-2 bg-white text-teal-600 rounded-lg font-medium hover:bg-teal-50 border border-teal-200">عرض</a>
+                                    <button @click="$refs.identityInput.click()"
+                                        class="px-4 py-2 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700">تحديث</button>
+                                    <input type="file" x-ref="identityInput" @change="uploadIdentity($event)"
+                                        accept="image/*" class="hidden">
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
             <div x-show="currentTab === 'reports'">
                 <h1 class="text-2xl font-bold mb-6">التقارير الطبية</h1>
-                
+
                 <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
-                    <div class="border-2 border-dashed border-teal-200 rounded-xl p-8 text-center bg-teal-50 hover:bg-teal-100 cursor-pointer" @click="$refs.reportInput.click()">
-                        <input type="file" x-ref="reportInput" @change="uploadReport($event)" accept="image/*,.pdf" class="hidden" multiple>
-                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow">
-                            <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <div class="upload-zone border-2 border-dashed border-teal-300 rounded-2xl p-8 text-center bg-teal-50 hover:bg-teal-100 cursor-pointer"
+                        @click="$refs.reportInput.click()">
+                        <input type="file" x-ref="reportInput" @change="uploadReport($event)" accept="image/*,.pdf"
+                            class="hidden" multiple>
+                        <div
+                            class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow">
+                            <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4" />
+                            </svg>
                         </div>
                         <h3 class="text-lg font-bold text-teal-800">رفع تقرير جديد</h3>
                         <p class="text-gray-600 mt-2">PDF أو صورة</p>
                     </div>
                 </div>
-                
+
                 <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
                     <div class="p-4 border-b bg-gray-50">
                         <h3 class="font-bold">تقاريري المرفوعة</h3>
                     </div>
                     <template x-if="documents.length === 0">
-                        <div class="p-8 text-center text-gray-500">لا توجد تقارير مرفوعة بعد</div>
+                        <div class="p-12 text-center text-gray-500">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p>لا توجد تقارير مرفوعة بعد</p>
+                        </div>
                     </template>
                     <template x-for="doc in documents" :key="doc.id">
-                        <div class="flex items-center justify-between p-4 border-b hover:bg-gray-50">
+                        <div class="flex items-center justify-between p-4 border-b hover:bg-gray-50 transition">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <div class="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
                                 </div>
                                 <div>
                                     <p class="font-medium" x-text="doc.file_name"></p>
-                                    <p class="text-xs text-gray-400" x-text="new Date(doc.created_at).toLocaleDateString('ar')"></p>
+                                    <p class="text-xs text-gray-400"
+                                        x-text="new Date(doc.created_at).toLocaleDateString('ar')"></p>
                                 </div>
                             </div>
-                            <a :href="'/api/download?url=' + encodeURIComponent(doc.file_url) + '&filename=' + doc.file_name" class="text-teal-600 hover:bg-teal-50 px-3 py-1 rounded-lg">تحميل</a>
+                            <a :href="doc.file_url" target="_blank"
+                                class="text-teal-600 hover:bg-teal-50 px-4 py-2 rounded-lg font-medium">تحميل</a>
                         </div>
                     </template>
-                </div>
-            </div>
-
-            <div x-show="currentTab === 'hospital'">
-                <h1 class="text-2xl font-bold mb-6">مستندات المستشفى</h1>
-                <div class="bg-white rounded-2xl shadow-sm p-8 text-center">
-                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                    <h3 class="text-lg font-bold text-gray-700 mb-2">قريباً</h3>
-                    <p class="text-gray-500">سيتم إضافة مستندات المستشفى هنا</p>
                 </div>
             </div>
         </main>
     </div>
 
+    <!-- Toast -->
+    <div x-show="showToast" x-cloak x-transition
+        class="fixed bottom-4 right-4 bg-teal-600 text-white px-6 py-3 rounded-xl shadow-lg z-50 flex items-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd" />
+        </svg>
+        <span x-text="toastMessage"></span>
+    </div>
+
     <script>
-        const supabaseUrl = 'https://rusuwljflrremkszgstn.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1c3V3bGpmbHJyZW1rc3pnc3RuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0Njk3NjgsImV4cCI6MjA3MDA0NTc2OH0.DFioJz2FNQwpzFEilgagcAFtvQftCkVn4ts-yTjT5vU'
-        const sbClient = supabase.createClient(supabaseUrl, supabaseKey)
+        const supabaseUrl = 'https://ynfciltkzgexnfmtjqgr.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyFzZSIsInJlZiI6InluZmNpbHRremdleG5mbXRqcWdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzMjc2NzcsImV4cCI6MjA0ODkwMzY3N30.bCQT0lKMDsxrLXPgK_ynJvPIwVfGdpOWr-A0t5y8sQ8';
+        const sbClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        const COUNTRY_CODES = {
+            'IQ': '+964', 'SA': '+966', 'AE': '+971', 'KW': '+965', 'QA': '+974',
+            'BH': '+973', 'OM': '+968', 'JO': '+962', 'LB': '+961', 'SY': '+963',
+            'PS': '+970', 'EG': '+20', 'SD': '+249', 'YE': '+967', 'IR': '+98', 'TR': '+90'
+        };
 
         function dashboardApp() {
             return {
@@ -191,7 +387,11 @@ cat > backend/templates/dashboard.html << 'ENDOFFILE'
                 user: null,
                 profile: {},
                 documents: [],
-                
+                identityDocument: null,
+                phoneCode: '',
+                showToast: false,
+                toastMessage: '',
+
                 async init() {
                     const { data: { session } } = await sbClient.auth.getSession();
                     if (!session) {
@@ -203,48 +403,113 @@ cat > backend/templates/dashboard.html << 'ENDOFFILE'
                     await this.loadDocuments();
                     this.loading = false;
                 },
-                
+
                 async loadProfile() {
+                    // Get from user metadata first
+                    const meta = this.user.user_metadata || {};
+                    this.profile = {
+                        id: this.user.id,
+                        email: this.user.email,
+                        full_name: meta.full_name || '',
+                        first_name: meta.first_name || '',
+                        last_name: meta.last_name || '',
+                        country: meta.country || '',
+                        phone: meta.phone?.replace(/^\+\d+/, '') || '',
+                        patient_id: meta.patient_id || 'Raha-' + this.user.id.slice(0, 6).toUpperCase(),
+                        avatar_url: meta.avatar_url || null
+                    };
+                    this.phoneCode = COUNTRY_CODES[this.profile.country] || '';
+
+                    // Try to get from profiles table
                     const { data } = await sbClient.from('profiles').select('*').eq('id', this.user.id).single();
-                    if (data) this.profile = data;
+                    if (data) {
+                        this.profile = { ...this.profile, ...data };
+                        this.phoneCode = COUNTRY_CODES[data.country] || this.phoneCode;
+                    }
                 },
-                
+
                 async loadDocuments() {
                     const { data } = await sbClient.from('documents').select('*').eq('user_id', this.user.id).order('created_at', { ascending: false });
-                    if (data) this.documents = data;
+                    if (data) {
+                        this.documents = data.filter(d => d.doc_category !== 'identity');
+                        this.identityDocument = data.find(d => d.doc_category === 'identity') || null;
+                    }
                 },
-                
+
+                updateProfilePhoneCode() {
+                    this.phoneCode = COUNTRY_CODES[this.profile.country] || '';
+                },
+
                 async saveProfile() {
-                    const { error } = await sbClient.from('profiles').update({
-                        full_name: this.profile.full_name,
-                        phone: this.profile.phone,
+                    const fullName = `${this.profile.first_name} ${this.profile.last_name}`.trim();
+                    const fullPhone = this.phoneCode + this.profile.phone;
+
+                    // Update user metadata
+                    await sbClient.auth.updateUser({
+                        data: {
+                            full_name: fullName,
+                            first_name: this.profile.first_name,
+                            last_name: this.profile.last_name,
+                            country: this.profile.country,
+                            phone: fullPhone
+                        }
+                    });
+
+                    // Upsert to profiles table
+                    await sbClient.from('profiles').upsert({
+                        id: this.user.id,
+                        full_name: fullName,
+                        first_name: this.profile.first_name,
+                        last_name: this.profile.last_name,
+                        email: this.profile.email,
+                        phone: fullPhone,
                         country: this.profile.country,
-                        address: this.profile.address,
+                        patient_id: this.profile.patient_id,
                         updated_at: new Date().toISOString()
-                    }).eq('id', this.user.id);
-                    
-                    if (error) alert('حدث خطأ: ' + error.message);
-                    else alert('تم حفظ التغييرات بنجاح');
+                    });
+
+                    this.profile.full_name = fullName;
+                    this.notify('تم حفظ التغييرات بنجاح');
                 },
-                
+
+                async uploadIdentity(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    const newFileName = `${this.profile.first_name}_${this.profile.last_name}_ID.${file.name.split('.').pop()}`;
+                    const filePath = `${this.user.id}/identity/${Date.now()}_${newFileName}`;
+
+                    const { error: uploadError } = await sbClient.storage.from('documents').upload(filePath, file);
+                    if (uploadError) {
+                        alert('خطأ في رفع الملف: ' + uploadError.message);
+                        return;
+                    }
+
+                    const { data: { publicUrl } } = sbClient.storage.from('documents').getPublicUrl(filePath);
+
+                    await sbClient.from('documents').insert({
+                        user_id: this.user.id,
+                        patient_code: this.profile.patient_id,
+                        file_name: newFileName,
+                        file_url: publicUrl,
+                        file_size: file.size,
+                        doc_category: 'identity'
+                    });
+
+                    await this.loadDocuments();
+                    this.notify('تم رفع صورة الهوية بنجاح');
+                },
+
                 async uploadReport(event) {
                     const files = event.target.files;
                     if (!files.length) return;
-                    
+
                     for (const file of files) {
                         const fileName = `${this.user.id}/${Date.now()}_${file.name}`;
-                        
-                        const { data: uploadData, error: uploadError } = await sbClient.storage
-                            .from('documents')
-                            .upload(fileName, file);
-                        
-                        if (uploadError) {
-                            alert('خطأ في رفع الملف: ' + uploadError.message);
-                            continue;
-                        }
-                        
+                        const { error: uploadError } = await sbClient.storage.from('documents').upload(fileName, file);
+                        if (uploadError) continue;
+
                         const { data: { publicUrl } } = sbClient.storage.from('documents').getPublicUrl(fileName);
-                        
                         await sbClient.from('documents').insert({
                             user_id: this.user.id,
                             patient_code: this.profile.patient_id,
@@ -254,11 +519,17 @@ cat > backend/templates/dashboard.html << 'ENDOFFILE'
                             doc_category: 'patient_report'
                         });
                     }
-                    
+
                     await this.loadDocuments();
-                    alert('تم رفع الملفات بنجاح');
+                    this.notify('تم رفع الملفات بنجاح');
                 },
-                
+
+                notify(message) {
+                    this.toastMessage = message;
+                    this.showToast = true;
+                    setTimeout(() => this.showToast = false, 3000);
+                },
+
                 async logout() {
                     await sbClient.auth.signOut();
                     window.location.href = '/';
@@ -267,5 +538,5 @@ cat > backend/templates/dashboard.html << 'ENDOFFILE'
         }
     </script>
 </body>
+
 </html>
-ENDOFFILE

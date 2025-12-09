@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="الأسئلة الأكثر شيوعاً حول العلاج في الهند - إجابات شافية على مخاوفكم وأسئلتكم | راحه ميديكال">
+    <meta name="keywords" content="أسئلة شائعة، العلاج في الهند، السياحة العلاجية، التأشيرات الطبية، التكاليف">
+    <title>الأسئلة الأكثر شيوعاً | Raha Medical</title>
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .faq-item {
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateX(-5px);
+        }
+
+        .category-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .category-active .category-icon {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="/" class="flex items-center">
+                    <img src="/static/images/logo.png" alt="Raha Medical" class="h-10 md:h-12 w-auto">
+                </a>
+                <a href="/" class="text-teal-600 hover:text-teal-700 font-medium flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    العودة للرئيسية
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-br from-teal-700 via-teal-800 to-teal-900 text-white py-20 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-teal-300 rounded-full blur-3xl"></div>
+        </div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div
+                class="inline-flex items-center justify-center w-24 h-24 bg-white/20 rounded-full mb-6 backdrop-blur-sm">
+                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                    </path>
+                </svg>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">الأسئلة الأكثر شيوعاً</h1>
+            <p class="text-teal-100 text-lg max-w-2xl mx-auto mb-6">إجابات شافية على جميع أسئلتكم ومخاوفكم حول رحلة
+                العلاج في الهند</p>
+            <p class="text-teal-200 text-sm">نحن هنا لطمأنتكم ومرافقتكم في كل خطوة من رحلتكم العلاجية</p>
+        </div>
+    </header>
+
+    <!-- FAQ Content -->
+    <main class="container mx-auto px-4 py-16" x-data="faqApp()">
+        <div class="max-w-6xl mx-auto">
+
+            <!-- Category Filter -->
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">اختر الفئة</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <template x-for="cat in categories" :key="cat.id">
+                        <button @click="selectedCategory = cat.id"
+                            :class="selectedCategory === cat.id ? 'bg-gradient-to-br from-teal-600 to-teal-700 text-white shadow-lg category-active' : 'bg-white text-gray-700 hover:bg-gray-50'"
+                            class="p-6 rounded-xl border-2 border-gray-200 transition-all duration-300 text-center">
+                            <div class="category-icon" x-html="cat.icon"></div>
+                            <p class="font-bold text-sm mt-3" x-text="cat.name"></p>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <!-- FAQ Items -->
+            <div class="space-y-4">
+                <template x-for="(faq, index) in filteredFAQs" :key="index">
+                    <div class="faq-item bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                        <button @click="toggleFAQ(index)"
+                            class="w-full p-6 text-right flex items-start justify-between gap-4 hover:bg-gray-50 transition">
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-gray-900 mb-2 flex items-center gap-3">
+                                    <span
+                                        class="flex-shrink-0 w-8 h-8 bg-teal-100 text-teal-700 rounded-full flex items-center justify-center text-sm font-bold"
+                                        x-text="index + 1"></span>
+                                    <span x-text="faq.question"></span>
+                                </h3>
+                            </div>
+                            <svg class="w-6 h-6 text-teal-600 flex-shrink-0 transition-transform duration-300"
+                                :class="{'rotate-180': openIndex === index}" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7">
+                                </path>
+                            </svg>
+                        </button>
+                        <div x-show="openIndex === index" x-collapse x-cloak>
+                            <div class="px-6 pb-6 pt-2">
+                                <div class="bg-teal-50 border-r-4 border-teal-600 p-5 rounded-lg">
+                                    <p class="text-gray-700 leading-relaxed whitespace-pre-line" x-text="faq.answer">
+                                    </p>
+                                    <div x-show="faq.tips && faq.tips.length > 0" class="mt-4">
+                                        <p class="text-teal-800 font-bold mb-2 flex items-center gap-2">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            نصيحة مهمة:
+                                        </p>
+                                        <ul class="space-y-2">
+                                            <template x-for="tip in faq.tips">
+                                                <li class="flex items-start gap-2 text-gray-600 text-sm">
+                                                    <svg class="w-4 h-4 text-teal-600 mt-1 flex-shrink-0"
+                                                        fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    <span x-text="tip"></span>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Contact CTA -->
+            <div class="mt-16 p-8 bg-gradient-to-r from-teal-600 to-teal-700 rounded-2xl text-white text-center">
+                <h3 class="text-2xl font-bold mb-4">لم تجد إجابة لسؤالك؟</h3>
+                <p class="mb-6 text-teal-100">فريقنا جاهز للإجابة على جميع استفساراتك بسرية تامة واحترافية عالية</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="https://wa.me/919217286505" target="_blank"
+                        class="inline-flex items-center gap-2 bg-green-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-600 transition shadow-lg">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654z">
+                            </path>
+                        </svg>
+                        تواصل عبر واتساب
+                    </a>
+                    <a href="mailto:support@rahamedical.com"
+                        class="inline-flex items-center gap-2 bg-white text-teal-700 px-6 py-3 rounded-xl font-bold hover:bg-gray-100 transition">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                        </svg>
+                        support@rahamedical.com
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">© 2025 Raha Medical. جميع الحقوق محفوظة.</p>
+                <div class="flex gap-6 text-sm text-gray-400">
+                    <a href="/privacy-policy" class="hover:text-white transition">سياسة الخصوصية</a>
+                    <a href="/terms" class="hover:text-white transition">الشروط والأحكام</a>
+                    <a href="/faq" class="hover:text-white transition text-teal-400">الأسئلة الشائعة</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function faqApp() {
+            return {
+                selectedCategory: 'all',
+                openIndex: null,
+                categories: [
+                    {
+                        id: 'all',
+                        name: 'جميع الأسئلة',
+                        icon: '<svg class="w-8 h-8 mx-auto text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>'
+                    },
+                    {
+                        id: 'cost',
+                        name: 'التكاليف والأسعار',
+                        icon: '<svg class="w-8 h-8 mx-auto text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+                    },
+                    {
+                        id: 'visa',
+                        name: 'التأشيرات والسفر',
+                        icon: '<svg class="w-8 h-8 mx-auto text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>'
+                    },
+                    {
+                        id: 'treatment',
+                        name: 'العلاج والخدمات',
+                        icon: '<svg class="w-8 h-8 mx-auto text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>'
+                    }
+                ],
+                faqs: [
+                    // التكاليف والأسعار
+                    {
+                        category: 'cost',
+                        question: 'كم تبلغ تكلفة العلاج في الهند مقارنة بالدول الأخرى؟',
+                        answer: 'تتراوح تكلفة العلاج في الهند بين 40% إلى 80% أقل من نفس العلاجات في أمريكا وأوروبا والدول الخليجية. على سبيل المثال:\n\n• عملية القلب المفتوح: 7,000 - 12,000 دولار (مقابل 70,000 - 150,000 دولار في أمريكا)\n• علاج أطفال الأنابيب: 3,000 - 6,000 دولار (مقابل 12,000 - 25,000 دولار)\n• جراحة استبدال الركبة: 5,500 - 8,000 دولار (مقابل 35,000 - 50,000 دولار)\n\nهذه التكاليف المنخفضة لا تعني جودة أقل، بل هي نتيجة لانخفاض تكاليف المعيشة والعمالة في الهند مع الحفاظ على أعلى معايير الجودة العالمية.',
+                        tips: [
+                            'التكاليف شاملة للفحوصات والأدوية والإقامة في المستشفى',
+                            'نقدم تقدير مفصل للتكلفة قبل السفر بدون أي التزامات',
+                            'يمكنك الدفع مباشرة للمستشفى لضمان الشفافية الكاملة'
+                        ]
+                    },
+                    {
+                        category: 'cost',
+                        question: 'هل هناك تكاليف خفية أو رسوم إضافية؟',
+                        answer: 'في راحه ميديكال، نؤمن بالشفافية التامة. جميع التكاليف واضحة ومحددة مسبقاً:\n\n✓ لا توجد رسوم وسطاء خفية\n✓ التقدير الأولي للتكلفة مجاني تماماً\n✓ نوضح جميع المصاريف المتوقعة (العلاج، الإقامة، التنقلات)\n✓ أي تكاليف إضافية لفحوصات طارئة يتم إخبارك بها مسبقاً\n✓ تدفع للمستشفى مباشرة، ونحن لا نأخذ عمولات من المريض\n\nنقدم لك فاتورة شاملة ومفصلة قبل بدء العلاج.',
+                        tips: [
+                            'احتفظ بنسخة من التقدير المكتوب للتكاليف',
+                            'اسأل عن أي احتمالات لتكاليف إضافية قبل بدء العلاج',
+                            'نساعدك في مراجعة الفواتير للتأكد من دقتها'
+                        ]
+                    },
+                    {
+                        category: 'cost',
+                        question: 'هل التكاليف المنخفضة تعني جودة أقل؟',
+                        answer: 'بالتأكيد لا! الأسباب الحقيقية وراء انخفاض التكاليف:\n\n1. انخفاض تكلفة المعيشة في الهند\n2. قلة التكاليف الإدارية مقارنة بالدول الغربية\n3. دعم حكومي لقطاع السياحة العلاجية\n4. المنافسة القوية بين المستشفيات تدفع للحفاظ على أسعار معقولة\n\nالجودة مضمونة من خلال:\n• اعتمادات دولية (JCI, NABH, ISO)\n• أطباء حاصلون على شهادات عالمية ومدربون في أفضل المؤسسات\n• أحدث التقنيات والأجهزة الطبية المتطورة\n• معدلات نجاح مماثلة أو أعلى من الدول الغربية',
+                        tips: [
+                            'نختار لك فقط المستشفيات الحاصلة على اعتمادات دولية',
+                            'يمكنك الاطلاع على سجلات المستشفيات ومعدلات النجاح',
+                            'نوفر لك تقييمات المرضى السابقين'
+                        ]
+                    },
+
+                    // التأشيرات والسفر
+                    {
+                        category: 'visa',
+                        question: 'كيف أحصل على التأشيرة الطبية للهند؟',
+                        answer: 'الحصول على التأشيرة الطبية سهل وسريع:\n\nالمستندات المطلوبة:\n• جواز سفر ساري المفعول (6 أشهر على الأقل)\n• صورة شخصية حديثة\n• خطاب دعوة من المستشفى (نوفره لك)\n• التقارير الطبية الأولية\n\nالخطوات:\n1. نرسل لك خطاب الدعوة الطبي من المستشفى\n2. تقديم الطلب إلكترونياً أو في السفارة الهندية\n3. مدة الإصدار: 24-72 ساعة للتأشيرة الإلكترونية\n\nمزايا التأشيرة الطبية:\n✓ صالحة لمدة 60 يوماً (قابلة للتمديد)\n✓ يمكن لمرافقين (اثنين كحد أقصى) الحصول على تأشيرة مرافق\n✓ إمكانية التجديد إذا احتاج العلاج لوقت أطول',
+                        tips: [
+                            'ابدأ إجراءات التأشيرة قبل السفر بأسبوعين على الأقل',
+                            'نساعدك في تجهيز جميع المستندات المطلوبة',
+                            'احتفظ بنسخة من خطاب الدعوة معك أثناء السفر'
+                        ]
+                    },
+                    {
+                        category: 'visa',
+                        question: 'ما هي مدة الإقامة المطلوبة للعلاج؟',
+                        answer: 'تختلف مدة الإقامة حسب نوع العلاج:\n\n• الاستشارات والفحوصات: 3-7 أيام\n• علاج أطفال الأنابيب: 3-5 أسابيع\n• جراحات العظام (استبدال المفاصل): 2-3 أسابيع\n• جراحات القلب: 2-4 أسابيع\n• علاج السرطان: يعتمد على البروتوكول (غالباً عدة زيارات)\n\nنحن نساعدك في:\n✓ تخطيط جدول زمني واقعي\n✓ حجز الإقامة المناسبة (فندق أو شقة مفروشة)\n✓ ترتيب رحلات المتابعة إذا لزم الأمر\n✓ توفير خدمات الرعاية المنزلية إذا احتجت البقاء فترة أطول',
+                        tips: [
+                            'خطط لبعض الأيام الإضافية للراحة قبل السفر',
+                            'يمكنك استكشاف الهند كسائح بعد انتهاء العلاج',
+                            'نوفر لك سكن قريب من المستشفى لتسهيل المتابعة'
+                        ]
+                    },
+                    {
+                        category: 'visa',
+                        question: 'هل توفرون خدمات الاستقبال والنقل في الهند؟',
+                        answer: 'نعم، نوفر خدمات شاملة منذ لحظة وصولك:\n\n✓ استقبال في المطار على مدار 24 ساعة\n✓ سيارة خاصة مكيفة للتنقل بين الفندق والمستشفى\n✓ مترجم عربي يرافقك في جميع المواعيد\n✓ تنسيق جميع المواعيد الطبية\n✓ المساعدة في حجز الفنادق (خيارات متنوعة تناسب جميع الميزانيات)\n✓ توفير أرقام طوارئ على مدار الساعة\n\nخدمات إضافية:\n• جولات سياحية (اختيارية)\n• توفير وجبات حلال\n• المساعدة في التسوق والاحتياجات اليومية',
+                        tips: [
+                            'شارك تفاصيل رحلتك مسبقاً لترتيب الاستقبال',
+                            'احتفظ برقم المنسق معك طوال فترة الإقامة',
+                            'لا تتردد في طلب أي مساعدة - نحن هنا من أجلك'
+                        ]
+                    },
+
+                    // العلاج والخدمات
+                    {
+                        category: 'treatment',
+                        question: 'كيف أتأكد من جودة المستشفى والأطباء؟',
+                        answer: 'نحن نختار لك فقط أفضل المستشفيات والأطباء وفق معايير صارمة:\n\nمعايير اختيار المستشفيات:\n✓ اعتماد JCI (اللجنة الدولية المشتركة)\n✓ اعتماد NABH (مجلس الاعتماد الوطني للمستشفيات)\n✓ تقييمات مرضى دوليين سابقين\n✓ معدلات نجاح موثقة ومرتفعة\n✓ أحدث التقنيات والمعدات\n\nمعايير اختيار الأطباء:\n• خبرة لا تقل عن 10 سنوات في التخصص\n• شهادات دولية معترف بها\n• تدريب في مؤسسات عالمية مرموقة\n• نتائج علاج موثقة ومثبتة\n• تقييمات إيجابية من مرضى سابقين\n\nنوفر لك:\n→ ملف كامل عن المستشفى والطبيب\n→ إمكانية استشارة أولية عن بُعد قبل السفر\n→ شهادات الاعتماد والتراخيص',
+                        tips: [
+                            'يمكنك التحدث مع مرضى سابقين من بلدك',
+                            'نرسل لك سيرة ذاتية مفصلة للطبيب المعالج',
+                            'الاستشارة الأولية مجانية تماماً'
+                        ]
+                    },
+                    {
+                        category: 'treatment',
+                        question: 'هل سأواجه صعوبة في التواصل بسبب اللغة؟',
+                        answer: 'لا داعي للقلق بشأن اللغة:\n\n✓ نوفر مترجم عربي-إنجليزي مختص بالمصطلحات الطبية\n✓ المترجم يرافقك في جميع المواعيد والفحوصات\n✓ التقارير الطبية تترجم إلى العربية\n✓ الكثير من الأطباء الهنود يتحدثون الإنجليزية بطلاقة\n✓ طاقم التمريض مدرب على التعامل مع المرضى الدوليين\n\nخدمات الترجمة تشمل:\n• ترجمة فورية أثناء الاستشارات\n• ترجمة التقارير والوصفات الطبية\n• المساعدة في فهم تعليمات ما بعد العلاج\n• التواصل مع المستشفى نيابة عنك\n\nنضمن لك فهم كل ما يتعلق بحالتك وعلاجك بوضوح تام.',
+                        tips: [
+                            'اطلب نسخة مترجمة من جميع التقارير الطبية',
+                            'لا تتردد في طلب التوضيح إذا لم تفهم شيئاً',
+                            'يمكن للمترجم المساعدة حتى خارج أوقات المواعيد'
+                        ]
+                    },
+                    {
+                        category: 'treatment',
+                        question: 'ما هي نسب نجاح العلاجات في الهند؟',
+                        answer: 'معدlات النجاح في المستشفيات الهندية مماثلة أو أعلى من الدول الغربية:\n\n• علاج أطفال الأنابيب: 60-70% (مقارنة بـ 40-50% في الولايات المتحدة)\n• جراحات القلب: 98-99% نجاح\n• زراعة الأعضاء: 95-98%\n• علاج السرطان: معدلات بقاء مماثلة للدول المتقدمة\n• جراحات العظام: 98% نسبة نجاح\n\nالعوامل المؤثرة في النجاح:\n√ حالة المريض الصحية العامة\n√ مرحلة اكتشاف المرض\n√ الالتزام بتعليمات ما بعد العلاج\n√ الدعم النفسي والعائلي\n\nنحن نقدم:\n→ إحصائيات موثقة من كل مستشفى\n→ تقييم واقعي لحالتك قبل السفر\n→ خطة علاج شخصية مبنية على أحدث الأبحاث',
+                        tips: [
+                            'اطلب معدلات النجاح الخاصة بحالتك المرضية',
+                            'تحدث مع أطباء محليين أيضاً للمقارنة',
+                            'النتائج الواقعية أفضل من الوعود المبالغ فيها'
+                        ]
+                    },
+                    {
+                        category: 'treatment',
+                        question: 'ماذا عن المتابعة بعد العودة إلى بلدي؟',
+                        answer: 'المتابعة بعد العلاج جزء أساسي من خدماتنا:\n\n✓ تقرير طبي شامل ومفصل بالعربية\n✓ استشارات متابعة مجانية عن بُعد (فيديو/هاتف)\n✓ التواصل المباشر مع الطبيب المعالج عند الحاجة\n✓ نساعدك في إيجاد طبيب محلي للمتابعة\n✓ إرسال الأدوية إذا لم تكن متوفرة محلياً\n✓ تنسيق زيارات المتابعة إذا لزم الأمر\n\nخطة المتابعة تشمل:\n• جدول زمني واضح للفحوصات\n• تعليمات مفصلة للعناية الذاتية\n• أرقام طوارئ للتواصل في أي وقت\n• مراجعة نتائج التحاليل والفحوصات\n\nنبقى معك حتى التعافي الكامل!',
+                        tips: [
+                            'احتفظ بنسخ من جميع التقارير والفحوصات',
+                            'اتبع تعليمات ما بعد العلاج بدقة',
+                            'لا تتردد في التواصل معنا لأي استفسار'
+                        ]
+                    },
+                    {
+                        category: 'treatment',
+                        question: 'هل الطعام في المستشفيات حلال؟',
+                        answer: 'نحن نتفهم أهمية هذا الأمر للمرضى المسلمين:\n\n✓ معظم المستشفيات التي نتعامل معها توفر وجبات حلال\n✓ يمكن طلب وجبات نباتية إذا كنت تفضل ذلك\n✓ نساعدك في إيجاد مطاعم حلال قريبة من الفندق\n✓ يمكن ترتيب طهي وجبات خاصة في السكن\n✓ الهند بها مجتمع مسلم كبير، والطعام الحلال متوفر بكثرة\n\nخيارات الطعام:\n• وجبات المستشفى (حلال/نباتية)\n• مطاعم حلال قريبة\n• طلب الطعام من الخارج\n• طهي في السكن (إذا كنت في شقة فندقية)\n\nنحرص على راحتك في جميع الجوانب!',
+                        tips: [
+                            'أخبرنا بتفضيلاتك الغذائية مسبقاً',
+                            'يمكن للمرافق المساعدة في إعداد الوجبات',
+                            'ابحث عن شهادة الحلال في المطاعم'
+                        ]
+                    },
+
+                    // أسئلة عامة (all)
+                    {
+                        category: 'all',
+                        question: 'هل يمكنني السفر بمفردي أم أحتاج مرافق؟',
+                        answer: 'القرار يعود لك، ولكن نوصي بشدة باصطحاب مرافق:\n\nأهمية المرافق:\n√ الدعم النفسي والمعنوي\n√ المساعدة في الأمور اليومية أثناء فترة التعافي\n√ التواصل مع الفريق الطبي\n√ تذكيرك بالأدوية والمواعيد\n√ الطمأنينة والراحة النفسية\n\nمزايا التأشيرة:\n• يمكن لمرافقين (2) الحصول على تأشيرة مرافق طبي\n• نفس صلاحية التأشيرة الطبية\n• تسهيلات خاصة في السفارة\n\nإذا سافرت بمفردك:\n→ نوفر لك مرافق طبي محترف (مقابل رسوم)\n→ متابعة يومية من فريقنا\n→ خدمات تمريض في السكن إذا لزم الأمر',
+                        tips: [
+                            'يفضل اختيار مرافق صبور ومتفهم',
+                            'المرافق يساعد كثيراً في فترة ما بعد العمليات',
+                            'نوفر إقامة مشتركة بأسعار معقولة للمرافق'
+                        ]
+                    },
+                    {
+                        category: 'all',
+                        question: 'ماذا لو حدثت مضاعفات أو مشاكل طبية؟',
+                        answer: 'سلامتك أولويتنا القصوى، ولدينا خطط طوارئ شاملة:\n\n✓ المستشفيات المعتمدة لديها أقسام طوارئ على مدار 24 ساعة\n✓ أطباء استشاريون متاحون في أي وقت\n✓ تأمين طبي للسفر (نساعدك في الحصول عليه)\n✓ فريقنا متاح للتواصل على مدار الساعة\n✓ بروتوكولات واضحة للتعامل مع أي طارئ\n\nفي حالة المضاعفات:\n1. العلاج الفوري في المستشفى إلى حين الاستقرار\n2. تعديل خطة العلاج إذا لزم الأمر\n3. تأجيل السفر حتى التعافي الكامل\n4. التنسيق مع التأمين لتغطية التكاليف الإضافية\n5. إبلاغ عائلتك وتحديثهم باستمرار\n\nالمستشفيات الإتي نختارها لديها:\n→ معدلات مضاعفات منخفضة جداً\n→ بروتوكولات سلامة صارمة\n→ تأمين طبي للمستشفى نفسها',
+                        tips: [
+                            'احصل على تأمين صحي للسفر يغطي المضاعفات',
+                            'احتفظ برقم الطوارئ معك دائماً',
+                            'أخبرنا بأي أعراض غير طبيعية فوراً'
+                        ]
+                    },
+                    {
+                        category: 'all',
+                        question: 'هل معلوماتي الطبية آمنة ومحمية؟',
+                        answer: 'نلتزم بأعلى معايير حماية البيانات والخصوصية:\n\n✓ سرية كاملة لجميع معلوماتك الطبية والشخصية\n✓ الامتثال لقوانين حماية البيانات (HIPAA, GDPR)\n✓ تشفير جميع البيانات الإلكترونية\n✓ الوصول للمعلومات محدود للكادر الطبي فقط\n✓ عدم مشاركة بياناتك مع أي طرف ثالث بدون إذنك\n\nإجراءات الأمان:\n• تخزين آمن للملفات الطبية\n• نماذج موافقة واضحة قبل أي مشاركة\n• حقك في الاطلاع على بياناتك في أي وقت\n• حقك في طلب حذف بياناتك بعد انتهاء العلاج\n\nالمستشفيات معتمدة بمعايير:\n→ ISO 27001 (أمن المعلومات)\n→ بروتوكولات HIPAA الدولية',
+                        tips: [
+                            'اقرأ سياسة الخصوصية قبل مشاركة البيانات',
+                            'احتفظ بنسخ شخصية من جميع التقارير',
+                            'يمكنك طلب إتلاف البيانات بعد العلاج'
+                        ]
+                    },
+                    {
+                        category: 'all',
+                        question: 'كيف أبدأ رحلة العلاج مع راحه ميديكال؟',
+                        answer: 'البداية سهلة وبسيطة:\n\nخطوة 1: الاستشارة الأولية (مجانية)\n• تواصل معنا عبر واتساب أو البريد الإلكتروني\n• شارك تقاريرك الطبية الحالية\n• أخبرنا عن حالتك واحتياجاتك\n\nخطوة 2: التقييم والتخطيط\n• نرسل ملفك لأفضل الأطباء المتخصصين\n• تحصل على آراء طبية ثانية مجانية\n• نقدم خطة علاج مفصلة مع تقدير التكاليف\n\nخطوة 3: اتخاذ القرار\n• راجع الخيارات بهدوء مع عائلتك\n• لا يوجد ضغط أو التزام\n• نجيب على جميع استفساراتك\n\nخطوة 4: الترتيبات\n• نساعدك في التأشيرة\n• حجز الرحلات والفندق\n• تنسيق المواعيد الطبية\n\nخطوة 5: السفر والعلاج\n• استقبال في المطار\n• مرافقة طوال فترة الإقامة\n• متابعة مستمرة بعد العودة\n\nالاستشارة الأولية والتقييم مجانيان تماماً بدون أي التزامات!',
+                        tips: [
+                            'ابدأ التواصل قبل 3-4 أسابيع من موعد السفر المتوقع',
+                            'جهز تقاريرك الطبية الحديثة',
+                            'لا تتردد في طرح أي سؤال مهما كان صغيراً'
+                        ]
+                    }
+                ],
+                get filteredFAQs() {
+                    if (this.selectedCategory === 'all') {
+                        return this.faqs;
+                    }
+                    return this.faqs.filter(faq => faq.category === this.selectedCategory || faq.category === 'all');
+                },
+                toggleFAQ(index) {
+                    this.openIndex = this.openIndex === index ? null : index;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

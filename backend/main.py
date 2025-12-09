@@ -41,6 +41,10 @@ async def privacy_policy(request: Request):
 async def terms_and_conditions(request: Request):
     return templates.TemplateResponse("terms.html", {"request": request})
 
+@app.get("/faq", response_class=HTMLResponse)
+async def faq_page(request: Request):
+    return templates.TemplateResponse("faq.html", {"request": request})
+
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_panel(request: Request):
     return templates.TemplateResponse("admin.html", {"request": request})

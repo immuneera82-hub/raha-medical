@@ -479,13 +479,13 @@
                     const newFileName = `${this.profile.first_name}_${this.profile.last_name}_ID.${file.name.split('.').pop()}`;
                     const filePath = `${this.user.id}/identity/${Date.now()}_${newFileName}`;
 
-                    const { error: uploadError } = await sbClient.storage.from('Documents').upload(filePath, file);
+                    const { error: uploadError } = await sbClient.storage.from('documents').upload(filePath, file);
                     if (uploadError) {
                         alert('خطأ في رفع الملف: ' + uploadError.message);
                         return;
                     }
 
-                    const { data: { publicUrl } } = sbClient.storage.from('Documents').getPublicUrl(filePath);
+                    const { data: { publicUrl } } = sbClient.storage.from('documents').getPublicUrl(filePath);
 
                     await sbClient.from('documents').insert({
                         user_id: this.user.id,
@@ -506,10 +506,10 @@
 
                     for (const file of files) {
                         const fileName = `${this.user.id}/${Date.now()}_${file.name}`;
-                        const { error: uploadError } = await sbClient.storage.from('Documents').upload(fileName, file);
+                        const { error: uploadError } = await sbClient.storage.from('documents').upload(fileName, file);
                         if (uploadError) continue;
 
-                        const { data: { publicUrl } } = sbClient.storage.from('Documents').getPublicUrl(fileName);
+                        const { data: { publicUrl } } = sbClient.storage.from('documents').getPublicUrl(fileName);
                         await sbClient.from('documents').insert({
                             user_id: this.user.id,
                             patient_code: this.profile.patient_id,

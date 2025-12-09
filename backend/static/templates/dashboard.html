@@ -157,11 +157,27 @@
 
                 <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
                     <div class="flex items-center gap-4 mb-6 pb-6 border-b">
-                        <img :src="profile.avatar_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(profile.full_name || 'User')&background=0d9488&color=fff&size=128'"
-                            class="w-20 h-20 rounded-full border-4 border-teal-50">
+                        <!-- Profile Photo with Upload -->
+                        <div class="relative group">
+                            <img :src="getProfileAvatar()"
+                                class="w-20 h-20 rounded-full border-4 border-teal-50 object-cover">
+                            <button @click="$refs.avatarInput.click()"
+                                class="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </button>
+                            <input type="file" x-ref="avatarInput" @change="uploadAvatar($event)" accept="image/*"
+                                class="hidden">
+                        </div>
                         <div>
                             <h2 class="text-xl font-bold" x-text="profile.full_name"></h2>
                             <p class="text-gray-500 text-sm" x-text="profile.email"></p>
+                            <button @click="$refs.avatarInput.click()"
+                                class="text-teal-600 text-sm hover:underline mt-1">تغيير الصورة</button>
                         </div>
                     </div>
 
@@ -287,9 +303,11 @@
                                 <div class="flex gap-2">
                                     <a :href="identityDocument.file_url" target="_blank"
                                         class="px-4 py-2 bg-white text-teal-600 rounded-lg font-medium hover:bg-teal-50 border border-teal-200">عرض</a>
-                                    <button @click="$refs.identityInput.click()"
+                                    <button @click="$refs.identityInputUpdate.click()"
                                         class="px-4 py-2 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700">تحديث</button>
-                                    <input type="file" x-ref="identityInput" @change="uploadIdentity($event)"
+                                    <button @click="deleteIdentity()"
+                                        class="px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600">حذف</button>
+                                    <input type="file" x-ref="identityInputUpdate" @change="uploadIdentity($event)"
                                         accept="image/*" class="hidden">
                                 </div>
                             </div>
@@ -528,6 +546,72 @@
                     this.toastMessage = message;
                     this.showToast = true;
                     setTimeout(() => this.showToast = false, 3000);
+                },
+
+                // Get profile avatar with female default
+                getProfileAvatar() {
+                    if (this.profile.avatar_url) {
+                        return this.profile.avatar_url;
+                    }
+                    // Check if Google avatar exists
+                    if (this.user?.user_metadata?.avatar_url) {
+                        return this.user.user_metadata.avatar_url;
+                    }
+                    // Default female avatar
+                    return 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + (this.profile.first_name || 'user') + '&backgroundColor=0d9488&accessories=blank&top=hijab&clothingColor=0d9488';
+                },
+
+                async uploadAvatar(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    const fileName = `${this.user.id}/avatar/${Date.now()}_avatar.${file.name.split('.').pop()}`;
+
+                    const { error: uploadError } = await sbClient.storage.from('documents').upload(fileName, file);
+                    if (uploadError) {
+                        alert('خطأ في رفع الصورة: ' + uploadError.message);
+                        return;
+                    }
+
+                    const { data: { publicUrl } } = sbClient.storage.from('documents').getPublicUrl(fileName);
+
+                    // Update profile with new avatar
+                    this.profile.avatar_url = publicUrl;
+
+                    await sbClient.auth.updateUser({
+                        data: { avatar_url: publicUrl }
+                    });
+
+                    await sbClient.from('profiles').upsert({
+                        id: this.user.id,
+                        avatar_url: publicUrl,
+                        updated_at: new Date().toISOString()
+                    });
+
+                    this.notify('تم تحديث الصورة الشخصية');
+                },
+
+                async deleteIdentity() {
+                    if (!confirm('هل أنت متأكد من حذف صورة الهوية؟')) return;
+
+                    if (this.identityDocument) {
+                        // Delete from documents table
+                        await sbClient.from('documents').delete().eq('id', this.identityDocument.id);
+
+                        // Try to delete from storage (extract path from URL)
+                        try {
+                            const url = new URL(this.identityDocument.file_url);
+                            const pathParts = url.pathname.split('/storage/v1/object/public/documents/');
+                            if (pathParts[1]) {
+                                await sbClient.storage.from('documents').remove([decodeURIComponent(pathParts[1])]);
+                            }
+                        } catch (e) {
+                            console.log('Could not delete from storage:', e);
+                        }
+
+                        this.identityDocument = null;
+                        this.notify('تم حذف صورة الهوية');
+                    }
                 },
 
                 async logout() {

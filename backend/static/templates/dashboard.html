@@ -367,8 +367,12 @@
                                         x-text="new Date(doc.created_at).toLocaleDateString('ar')"></p>
                                 </div>
                             </div>
-                            <a :href="doc.file_url" target="_blank"
-                                class="text-teal-600 hover:bg-teal-50 px-4 py-2 rounded-lg font-medium">تحميل</a>
+                            <div class="flex gap-2">
+                                <a :href="doc.file_url" target="_blank"
+                                    class="text-teal-600 hover:bg-teal-50 px-4 py-2 rounded-lg font-medium border border-teal-200">تحميل</a>
+                                <button @click="deleteReport(doc)"
+                                    class="text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg font-medium border border-red-200">حذف</button>
+                            </div>
                         </div>
                     </template>
                 </div>
@@ -522,24 +526,96 @@
                     const files = event.target.files;
                     if (!files.length) return;
 
-                    for (const file of files) {
-                        const fileName = `${this.user.id}/${Date.now()}_${file.name}`;
-                        const { error: uploadError } = await sbClient.storage.from('documents').upload(fileName, file);
-                        if (uploadError) continue;
+                    this.loading = true; // Show loading indicator
 
-                        const { data: { publicUrl } } = sbClient.storage.from('documents').getPublicUrl(fileName);
-                        await sbClient.from('documents').insert({
-                            user_id: this.user.id,
-                            patient_code: this.profile.patient_id,
-                            file_name: file.name,
-                            file_url: publicUrl,
-                            file_size: file.size,
-                            doc_category: 'patient_report'
-                        });
+                    for (const file of files) {
+                        try {
+                            // 1. Send to backend for renaming
+                            let newFileName = file.name;
+                            const formData = new FormData();
+                            formData.append('file', file);
+                            formData.append('patient_code', this.profile.patient_id);
+
+                            try {
+                                const response = await fetch('/api/process-report', {
+                                    method: 'POST',
+                                    body: formData
+                                });
+
+                                if (response.ok) {
+                                    const result = await response.json();
+                                    if (result.success && result.new_name) {
+                                        newFileName = result.new_name;
+                                        console.log('Renamed to:', newFileName);
+                                    }
+                                }
+                            } catch (apiError) {
+                                console.error('Processing API error:', apiError);
+                                // Continue with original name if API fails
+                            }
+
+                            // 2. Upload to Supabase Storage
+                            const filePath = `${this.user.id}/${Date.now()}_${newFileName}`;
+                            const { error: uploadError } = await sbClient.storage.from('documents').upload(filePath, file);
+
+                            if (uploadError) {
+                                console.error('Upload Error:', uploadError);
+                                this.notify('فشل رفع الملف: ' + file.name);
+                                continue;
+                            }
+
+                            // 3. Insert into Database
+                            const { data: { publicUrl } } = sbClient.storage.from('documents').getPublicUrl(filePath);
+
+                            await sbClient.from('documents').insert({
+                                user_id: this.user.id,
+                                patient_code: this.profile.patient_id,
+                                file_name: newFileName, // Use the new smart name
+                                file_url: publicUrl,
+                                file_size: file.size,
+                                doc_category: 'patient_report'
+                            });
+
+                        } catch (e) {
+                            console.error('General error:', e);
+                        }
                     }
 
                     await this.loadDocuments();
-                    this.notify('تم رفع الملفات بنجاح');
+                    this.loading = false;
+                    this.notify('تم معالجة ورفع الملفات بنجاح');
+                },
+
+                async deleteReport(doc) {
+                    if (!confirm('هل أنت متأكد من حذف هذا التقرير؟')) return;
+
+                    // Delete from documents table
+                    const { error } = await sbClient.from('documents').delete().eq('id', doc.id);
+
+                    if (error) {
+                        this.notify('حدث خطأ أثناء الحذف');
+                        return;
+                    }
+
+                    // Delete from storage
+                    try {
+                        // Extract path from public URL
+                        // Format: .../documents/USER_ID/FILENAME
+                        // We need the path relative to the bucket
+                        const url = new URL(doc.file_url);
+                        // The path usually comes after /documents/ in the URL if using standard Supabase storage URL
+                        // URL: https://xyz.supabase.co/storage/v1/object/public/documents/user_id/filename
+                        const pathParts = url.pathname.split('/documents/');
+                        if (pathParts.length > 1) {
+                            const storagePath = decodeURIComponent(pathParts[1]);
+                            await sbClient.storage.from('documents').remove([storagePath]);
+                        }
+                    } catch (e) {
+                        console.log('Could not delete from storage:', e);
+                    }
+
+                    await this.loadDocuments();
+                    this.notify('تم حذف التقرير بنجاح');
                 },
 
                 notify(message) {

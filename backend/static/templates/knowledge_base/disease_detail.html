@@ -1,0 +1,275 @@
+{% extends "knowledge_base/base.html" %}
+
+{% block title %}{{ condition.name_ar }} | Raha Medical{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalCondition",
+  "name": "{{ condition.name_en }}",
+  "alternateName": "{{ condition.name_ar }}",
+  "description": "{{ condition.definition_en }}",
+  "associatedAnatomy": {
+    "@type": "AnatomicalStructure",
+    "name": "{{ condition.scientific_name }}"
+  },
+  "cause": [
+    {% for cause in condition.causes_en %}
+    {
+      "@type": "MedicalCause",
+      "name": "{{ cause }}"
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ],
+  "signOrSymptom": [
+    {% for symptom in condition.symptoms_early_en %}
+    {
+      "@type": "MedicalSymptom",
+      "name": "{{ symptom }}"
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="bg-white min-h-screen pb-12">
+    <!-- Hero Section -->
+    <div class="bg-teal-900 text-white py-16 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('{{ condition.image_url }}')] bg-cover bg-center"></div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <span class="inline-block bg-teal-700 px-4 py-1 rounded-full text-sm font-semibold mb-4 text-teal-100">
+                الكود الطبي: {{ condition.code }}
+            </span>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ condition.name_ar }}</h1>
+            <p class="text-xl text-teal-100 max-w-3xl mx-auto">{{ condition.scientific_name }}</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 -mt-10 relative z-20">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Sidebar (TOC & Quick Info) -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-lg p-6 sticky top-24">
+                    <h3 class="font-bold text-gray-900 mb-4 border-b pb-2">فهرس المحتوى</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#definition" class="hover:text-teal-600 flex items-center gap-2"><span
+                                    class="w-1.5 h-1.5 bg-teal-500 rounded-full"></span>التعريف العلمي</a></li>
+                        <li><a href="#symptoms" class="hover:text-teal-600 flex items-center gap-2"><span
+                                    class="w-1.5 h-1.5 bg-teal-500 rounded-full"></span>الأعراض</a></li>
+                        <li><a href="#diagnosis" class="hover:text-teal-600 flex items-center gap-2"><span
+                                    class="w-1.5 h-1.5 bg-teal-500 rounded-full"></span>التشخيص والتحاليل</a></li>
+                        <li><a href="#treatment" class="hover:text-teal-600 flex items-center gap-2"><span
+                                    class="w-1.5 h-1.5 bg-teal-500 rounded-full"></span>خيارات العلاج</a></li>
+                        <li><a href="#hospitals" class="hover:text-teal-600 flex items-center gap-2"><span
+                                    class="w-1.5 h-1.5 bg-teal-500 rounded-full"></span>المستشفيات المقترحة</a></li>
+                    </ul>
+
+                    <div class="mt-8 pt-6 border-t">
+                        <a href="#consultation"
+                            class="block w-full bg-teal-600 text-white text-center py-3 rounded-xl font-bold hover:bg-teal-700 shadow-md">
+                            استشارة طبيب مجاناً
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-8">
+
+                <!-- Definition -->
+                <section id="definition" class="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-teal-50 rounded-lg flex items-center justify-center text-teal-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">التعريف العلمي</h2>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed text-lg">{{ condition.definition_ar }}</p>
+                </section>
+
+                <!-- Causes & Risk Factors -->
+                <section class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-orange-50 rounded-xl p-6 border border-orange-100">
+                        <h3 class="font-bold text-orange-900 mb-3 flex items-center gap-2">
+                            ⚠️ الأسباب
+                        </h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            {% for cause in condition.causes_ar %}
+                            <li>{{ cause }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="bg-red-50 rounded-xl p-6 border border-red-100">
+                        <h3 class="font-bold text-red-900 mb-3 flex items-center gap-2">
+                            🚫 عوامل الخطر
+                        </h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            {% for risk in condition.risk_factors_ar %}
+                            <li>{{ risk }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Symptoms -->
+                <section id="symptoms" class="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">الأعراض والعلامات</h2>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold text-teal-800 mb-3 bg-teal-50 inline-block px-3 py-1 rounded-lg">الأعراض
+                            المبكرة</h4>
+                        <ul class="grid md:grid-cols-2 gap-3">
+                            {% for symptom in condition.symptoms_early_ar %}
+                            <li class="flex items-start gap-2 text-gray-700">
+                                <span class="text-teal-500 mt-1">✔</span> {{ symptom }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="border-t pt-6">
+                        <h4 class="font-bold text-red-800 mb-3 bg-red-50 inline-block px-3 py-1 rounded-lg">الأعراض
+                            المتقدمة</h4>
+                        <ul class="grid md:grid-cols-2 gap-3">
+                            {% for symptom in condition.symptoms_advanced_ar %}
+                            <li class="flex items-start gap-2 text-gray-700">
+                                <span class="text-red-500 mt-1">‼</span> {{ symptom }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="mt-6 bg-blue-50 p-4 rounded-lg flex gap-4 items-start">
+                        <span class="text-2xl">👨‍⚕️</span>
+                        <div>
+                            <p class="font-bold text-blue-900">متى يجب زيارة الطبيب؟</p>
+                            <p class="text-blue-800 text-sm">{{ condition.when_to_see_doctor_ar }}</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Diagnosis -->
+                <section id="diagnosis" class="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">طرق التشخيص والتحاليل</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-bold text-gray-800 mb-2">طرق التشخيص:</h4>
+                            <div class="flex flex-wrap gap-2">
+                                {% for method in condition.diagnosis_methods_ar %}
+                                <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700 border">{{ method
+                                    }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 mb-2">التحاليل المطلوبة:</h4>
+                            <ul class="list-disc list-inside text-gray-600">
+                                {% for test in condition.required_tests_ar %}
+                                <li>{{ test }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Treatment -->
+                <section id="treatment"
+                    class="bg-gradient-to-br from-teal-50 to-white rounded-xl p-8 shadow-sm border border-teal-100">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">خيارات العلاج المتاحة</h2>
+                    <div class="space-y-4">
+                        {% for option in condition.treatment_options_ar %}
+                        <div class="bg-white p-4 rounded-lg shadow-sm flex gap-4">
+                            <div
+                                class="w-8 h-8 bg-teal-100 rounded-full flex-shrink-0 flex items-center justify-center text-teal-600 font-bold">
+                                {{ loop.index }}
+                            </div>
+                            <p class="text-gray-700 font-medium pt-1">{{ option }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mt-8">
+                        <div class="bg-white p-4 rounded-lg text-center border">
+                            <p class="text-sm text-gray-500 mb-1">نسب النجاح المتوقعة</p>
+                            <p class="text-xl font-bold text-green-600">{{ condition.success_rates }}</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg text-center border">
+                            <p class="text-sm text-gray-500 mb-1">مدة التعافي التقريبية</p>
+                            <p class="text-xl font-bold text-blue-600">{{ condition.recovery_time_ar }}</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Why India & Raha Services -->
+                <section class="bg-blue-900 text-white rounded-xl p-8 shadow-lg">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-bold text-xl mb-3 text-blue-200">لماذا العلاج في الهند؟</h3>
+                            <p class="text-blue-50 leading-relaxed">{{ condition.why_choose_india_ar }}</p>
+                        </div>
+                        <div class="border-t md:border-t-0 md:border-r md:pr-8 border-blue-700 pt-6 md:pt-0">
+                            <h3 class="font-bold text-xl mb-3 text-teal-200">خدمات Raha Medical لهذا المرض</h3>
+                            <p class="text-blue-50 leading-relaxed">{{ condition.raha_services_ar }}</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Hospitals -->
+                <section id="hospitals">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">أفضل المستشفيات لعلاج هذا المرض</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {% for hospital in condition.hospitals %}
+                        <div
+                            class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                            <div class="flex items-center gap-4">
+                                <img src="{{ hospital.image_url }}" alt="{{ hospital.name_ar }}"
+                                    class="w-16 h-16 rounded-lg object-cover bg-gray-100">
+                                <div>
+                                    <h4 class="font-bold text-gray-900">{{ hospital.name_ar }}</h4>
+                                    <p class="text-sm text-gray-500">{{ hospital.city }}، الهند</p>
+                                    <span
+                                        class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full mt-1 inline-block">نسبة
+                                        نجاح عالية</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p class="text-gray-500 col-span-2 text-center py-4">سيتم إضافة المستشفيات قريباً.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <!-- FAQ -->
+                <section class="bg-gray-50 rounded-xl p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">أسئلة شائعة</h2>
+                    <div class="space-y-4" x-data="{ active: null }">
+                        {% for faq in condition.faqs %}
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <button @click="active === {{ loop.index }} ? active = null : active = {{ loop.index }}"
+                                class="w-full flex justify-between items-center p-4 text-right font-bold text-gray-800 hover:bg-gray-50">
+                                <span>{{ faq.question }}</span>
+                                <span x-text="active === {{ loop.index }} ? '-' : '+'"
+                                    class="text-teal-600 text-xl"></span>
+                            </button>
+                            <div x-show="active === {{ loop.index }}" x-collapse
+                                class="p-4 pt-0 text-gray-600 border-t border-gray-100">
+                                {{ faq.answer }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

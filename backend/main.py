@@ -115,3 +115,7 @@ async def get_report_name(
     new_name = generate_report_name(report_type, patient_code, extension)
     
     return {"new_name": new_name, "test_type": report_type}
+
+# Import and Register Routers
+from backend.routers import knowledge_base
+app.include_router(knowledge_base.router)

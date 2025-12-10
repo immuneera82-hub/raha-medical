@@ -218,6 +218,55 @@
         </div>
     </nav>
 
+    <!-- Mobile Menu -->
+    <div x-show="mobileMenuOpen" x-collapse x-cloak
+        class="md:hidden bg-white border-b border-gray-100 sticky top-[65px] z-40 shadow-lg">
+        <div class="container mx-auto px-4 py-4 space-y-4">
+            <a href="#hospitals" @click="mobileMenuOpen = false"
+                class="block text-gray-700 hover:text-teal-600 font-medium py-2">المستشفيات</a>
+            <a href="#treatments" @click="mobileMenuOpen = false"
+                class="block text-gray-700 hover:text-teal-600 font-medium py-2">العلاجات</a>
+            <a href="#consultation" @click="mobileMenuOpen = false"
+                class="block text-gray-700 hover:text-teal-600 font-medium py-2">استشارة مجانية</a>
+            <a href="#blog" @click="mobileMenuOpen = false"
+                class="block text-gray-700 hover:text-teal-600 font-medium py-2">المدونة</a>
+            <hr class="border-gray-100">
+            <template x-if="!user">
+                <div class="space-y-3 pt-2">
+                    <button @click="showAuthModal('login'); mobileMenuOpen = false"
+                        class="block w-full text-center text-teal-700 font-bold border border-teal-100 bg-teal-50 px-4 py-3 rounded-xl hover:bg-teal-100">
+                        تسجيل دخول
+                    </button>
+                    <button @click="showAuthModal('register'); mobileMenuOpen = false"
+                        class="block w-full text-center bg-teal-600 text-white px-4 py-3 rounded-xl font-bold hover:bg-teal-700 shadow-md">
+                        حساب جديد
+                    </button>
+                </div>
+            </template>
+            <template x-if="user">
+                <div class="space-y-3 pt-2">
+                    <div class="flex items-center gap-3 px-2 py-2 bg-gray-50 rounded-xl">
+                        <img :src="user.user_metadata?.avatar_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.email)"
+                            class="w-10 h-10 rounded-full border-2 border-teal-100">
+                        <div>
+                            <p class="text-sm font-bold text-gray-800"
+                                x-text="user.user_metadata?.full_name || user.email.split('@')[0]"></p>
+                            <p class="text-xs text-teal-600">تم تسجيل الدخول</p>
+                        </div>
+                    </div>
+                    <a href="/dashboard"
+                        class="block w-full text-center text-gray-700 bg-gray-100 px-4 py-3 rounded-xl font-bold">
+                        لوحة التحكم
+                    </a>
+                    <button @click="logout(); mobileMenuOpen = false"
+                        class="block w-full text-center text-red-600 border border-red-100 bg-red-50 px-4 py-3 rounded-xl font-bold hover:bg-red-100">
+                        تسجيل خروج
+                    </button>
+                </div>
+            </template>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section class="relative min-h-[700px] flex items-center justify-center overflow-hidden">
         <!-- Background Image -->

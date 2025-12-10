@@ -37,3 +37,38 @@ uploads/
 *.pem
 *.key
 *.crt
+
+# Credentials and Secrets - إضافة جديدة
+credentials.txt
+*credentials*
+secrets/
+keys/
+*.secret
+
+# Backup files - إضافة جديدة
+backups/
+*.backup
+*.bak
+*.sql
+*.dump
+
+# Temporary files - إضافة جديدة
+temp/
+tmp/
+*.tmp
+
+# Database files - إضافة جديدة
+*.db
+*.sqlite
+*.sqlite3
+
+# Security files - إضافة جديدة
+security/
+*.p12
+*.pfx
+*.jks
+
+# Config files that might contain secrets - إضافة جديدة
+config/local.py
+config/production.py
+docker-compose.override.yml

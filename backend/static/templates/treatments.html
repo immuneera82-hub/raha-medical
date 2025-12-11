@@ -103,224 +103,70 @@
     <section class="py-16">
         <div class="container mx-auto px-4">
 
-            <!-- Category 1: Gynecology -->
-            <div class="mb-16">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                            </path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900">أمراض النساء والجهاز التناسلي</h2>
-                        <p class="text-gray-500">رعاية شاملة لصحة المرأة</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">اضطرابات الدورة الشهرية</h3>
-                        <p class="text-gray-600 text-sm mb-4">تشخيص وعلاج عدم انتظام الدورة، النزيف الغزير، وآلام الطمث
-                            الشديدة باستخدام أحدث التقنيات.</p>
-                        <span
-                            class="inline-block bg-pink-50 text-pink-700 text-xs font-bold px-3 py-1 rounded-full">الأكثر
-                            طلباً</span>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">الأورام الليفية الرحمية</h3>
-                        <p class="text-gray-600 text-sm mb-4">علاج الأورام الليفية بالمنظار أو الاستئصال الجراحي مع
-                            الحفاظ على الرحم قدر الإمكان.</p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">أمراض عنق الرحم</h3>
-                        <p class="text-gray-600 text-sm mb-4">الكشف المبكر وعلاج تغيرات خلايا عنق الرحم ومتابعة فيروس
-                            الورم الحليمي.</p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">اضطرابات المهبل والفرج</h3>
-                        <p class="text-gray-600 text-sm mb-4">علاج الالتهابات، الجفاف، والمشاكل الجلدية في المنطقة
-                            التناسلية.</p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">ضعف عضلات الحوض</h3>
-                        <p class="text-gray-600 text-sm mb-4">علاج هبوط الرحم والمثانة، وسلس البول، بالعلاج الطبيعي أو
-                            الجراحة.</p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">آلام الحوض المزمنة</h3>
-                        <p class="text-gray-600 text-sm mb-4">تشخيص أسباب الألم المزمن وعلاجه بما في ذلك بطانة الرحم
-                            المهاجرة.</p>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Category 2: Fertility -->
-            <div class="mb-16">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197">
-                            </path>
-                        </svg>
+            <!-- Dynamic Specialties Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for specialty in specialties %}
+                <div
+                    class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-2 group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="w-14 h-14 rounded-xl flex items-center justify-center transition-colors
+                                    {% if 'oncology' in specialty.slug %}bg-rose-100 text-rose-600 group-hover:bg-rose-600 group-hover:text-white
+                                    {% elif 'fertility' in specialty.slug %}bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white
+                                    {% elif 'orthopedics' in specialty.slug %}bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white
+                                    {% else %}bg-teal-100 text-teal-600 group-hover:bg-teal-600 group-hover:text-white{% endif %}">
+                            <!-- Dynamic Icon Selection based on slug (Simple mapping) -->
+                            {% if 'oncology' in specialty.slug %}
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                </path>
+                            </svg>
+                            {% elif 'fertility' in specialty.slug or 'ivf' in specialty.slug %}
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197">
+                                </path>
+                            </svg>
+                            {% elif 'orthopedics' in specialty.slug or 'spine' in specialty.slug %}
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                                </path>
+                            </svg>
+                            {% elif 'card' in specialty.slug %}
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                </path>
+                            </svg>
+                            {% else %}
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                                </path>
+                            </svg>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900">{{ specialty.name_ar }}</h2>
+                            <p class="text-xs text-gray-500 font-bold english-font">{{ specialty.name_en }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900">الخصوبة وأطفال الأنابيب</h2>
-                        <p class="text-gray-500">تحقيق حلم الأمومة بأحدث التقنيات</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">أطفال الأنابيب (IVF)</h3>
-                        <p class="text-gray-600 text-sm mb-4">تقنية التلقيح الصناعي خارج الجسم بنسب نجاح عالية مع أحدث
-                            المختبرات.</p>
-                        <span
-                            class="inline-block bg-purple-50 text-purple-700 text-xs font-bold px-3 py-1 rounded-full">نسبة
-                            نجاح 65%+</span>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">الحقن المجهري (ICSI)</h3>
-                        <p class="text-gray-600 text-sm mb-4">حقن الحيوان المنوي مباشرة في البويضة لحالات العقم الشديد.
-                        </p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">تجميد البويضات</h3>
-                        <p class="text-gray-600 text-sm mb-4">حفظ الخصوبة للمستقبل بتقنيات التجميد السريع المتطورة.</p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">علاج تكيس المبايض</h3>
-                        <p class="text-gray-600 text-sm mb-4">علاج متلازمة تكيس المبايض وتنظيم الهرمونات لتحسين فرص
-                            الحمل.</p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">الإجهاض المتكرر</h3>
-                        <p class="text-gray-600 text-sm mb-4">تشخيص أسباب الإجهاض المتكرر ووضع خطة علاجية للحمل الناجح.
-                        </p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">استشارة الحمل عالي الخطورة</h3>
-                        <p class="text-gray-600 text-sm mb-4">متابعة متخصصة للحالات التي تحتاج رعاية خاصة أثناء الحمل.
-                        </p>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Category 3: Oncology -->
-            <div class="mb-16">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
-                            </path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900">أورام النساء</h2>
-                        <p class="text-gray-500">علاج السرطان بأحدث البروتوكولات العالمية</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">سرطان الثدي</h3>
-                        <p class="text-gray-600 text-sm mb-4">الكشف المبكر، الجراحة، العلاج الكيميائي والإشعاعي، وإعادة
-                            الترميم.</p>
-                        <span
-                            class="inline-block bg-rose-50 text-rose-700 text-xs font-bold px-3 py-1 rounded-full">فريق
-                            متخصص</span>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">سرطان عنق الرحم</h3>
-                        <p class="text-gray-600 text-sm mb-4">الوقاية والعلاج المبكر وبرامج المتابعة الدورية.</p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">سرطان الرحم</h3>
-                        <p class="text-gray-600 text-sm mb-4">علاج سرطان بطانة الرحم بالجراحة والعلاجات المساعدة.</p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">سرطان المبيض</h3>
-                        <p class="text-gray-600 text-sm mb-4">علاج أورام المبيض بالجراحة والعلاج الكيميائي المتقدم.</p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">إعادة ترميم الثدي</h3>
-                        <p class="text-gray-600 text-sm mb-4">جراحة تجميلية وترميمية بعد استئصال الثدي لاستعادة الثقة.
-                        </p>
-                    </div>
-                </div>
-            </div>
+                    <p class="text-gray-600 text-sm mb-6 min-h-[40px]">{{ specialty.description_ar }}</p>
 
-            <!-- Category 4: Hormonal -->
-            <div class="mb-16">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a href="/knowledge-base"
+                        class="inline-flex items-center justify-center w-full gap-2 border border-teal-600 text-teal-700 py-3 rounded-xl font-bold hover:bg-teal-600 hover:text-white transition-all group-hover:shadow-lg">
+                        <span>عرض التفاصيل في الموسوعة</span>
+                        <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                         </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900">الغدد الصماء والهرمونات</h2>
-                        <p class="text-gray-500">توازن هرموني لحياة أفضل</p>
-                    </div>
+                    </a>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">اضطرابات الغدة الدرقية</h3>
-                        <p class="text-gray-600 text-sm mb-4">علاج فرط أو قصور الغدة الدرقية وتأثيرها على صحة المرأة.
-                        </p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">السكري عند النساء</h3>
-                        <p class="text-gray-600 text-sm mb-4">إدارة السكري وسكري الحمل مع متابعة متخصصة.</p>
-                    </div>
-                    <div class="treatment-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">فشل المبيض المبكر</h3>
-                        <p class="text-gray-600 text-sm mb-4">تشخيص وعلاج انقطاع الطمث المبكر والحفاظ على الخصوبة.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- More Categories... -->
-            <div class="mb-16">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900">تخصصات إضافية</h2>
-                        <p class="text-gray-500">رعاية شاملة لجميع احتياجاتك</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="bg-white rounded-xl p-4 shadow-sm border text-center hover:shadow-md transition">
-                        <span class="font-bold text-gray-800">التهابات المسالك البولية</span>
-                    </div>
-                    <div class="bg-white rounded-xl p-4 shadow-sm border text-center hover:shadow-md transition">
-                        <span class="font-bold text-gray-800">أمراض المثانة</span>
-                    </div>
-                    <div class="bg-white rounded-xl p-4 shadow-sm border text-center hover:shadow-md transition">
-                        <span class="font-bold text-gray-800">صحة الثدي</span>
-                    </div>
-                    <div class="bg-white rounded-xl p-4 shadow-sm border text-center hover:shadow-md transition">
-                        <span class="font-bold text-gray-800">أمراض المناعة الذاتية</span>
-                    </div>
-                    <div class="bg-white rounded-xl p-4 shadow-sm border text-center hover:shadow-md transition">
-                        <span class="font-bold text-gray-800">الصحة النفسية</span>
-                    </div>
-                    <div class="bg-white rounded-xl p-4 shadow-sm border text-center hover:shadow-md transition">
-                        <span class="font-bold text-gray-800">تساقط الشعر</span>
-                    </div>
-                    <div class="bg-white rounded-xl p-4 shadow-sm border text-center hover:shadow-md transition">
-                        <span class="font-bold text-gray-800">جراحة السمنة</span>
-                    </div>
-                    <div class="bg-white rounded-xl p-4 shadow-sm border text-center hover:shadow-md transition">
-                        <span class="font-bold text-gray-800">التجميل النسائي</span>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
 
         </div>

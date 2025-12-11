@@ -11,7 +11,9 @@ def seed_database():
     supabase = get_supabase_client()
     
     # 1. SPECIALTIES
+
     specialties = [
+        # Existing & Core
         {
             "slug": "oncology",
             "name_ar": "علاج الأورام والسرطان",
@@ -39,6 +41,63 @@ def seed_database():
             "name_en": "IVF & Fertility",
             "description_ar": "تقنيات الحقن المجهري الحديثة ونسب نجاح عالمية.",
             "description_en": "Advanced ICSI techniques and world-class success rates."
+        },
+        # New Additions from Treatments Page
+        {
+            "slug": "gynecology",
+            "name_ar": "أمراض النساء والتوليد",
+            "name_en": "Gynecology",
+            "description_ar": "رعاية شاملة لصحة المرأة، علاج الأورام الليفية، ومتابعة الحمل عالي الخطورة.",
+            "description_en": "Comprehensive women's health care and high-risk pregnancy monitoring."
+        },
+        {
+            "slug": "endocrinology",
+            "name_ar": "الغدد الصماء والهرمونات",
+            "name_en": "Endocrinology",
+            "description_ar": "علاج اضطرابات الغدة الدرقية، السكري، وتوازن الهرمونات.",
+            "description_en": "Treatment of thyroid disorders, diabetes, and hormonal balance."
+        },
+        {
+            "slug": "cardiology",
+            "name_ar": "طب وجراحة القلب",
+            "name_en": "Cardiology",
+            "description_ar": "عمليات القلب المفتوح، القسطرة، وتغيير الصمامات.",
+            "description_en": "Open heart surgery, catheterization, and valve replacement."
+        },
+        {
+            "slug": "urology",
+            "name_ar": "المسالك البولية",
+            "name_en": "Urology",
+            "description_ar": "علاج حصوات الكلى، البروستاتا، وأمراض المثانة.",
+            "description_en": "Treatment of kidney stones, prostate, and bladder diseases."
+        },
+        {
+            "slug": "general-surgery",
+            "name_ar": "الجراحة العامة والسمنة",
+            "name_en": "General Surgery",
+            "description_ar": "جراحات السمنة (تكميم/تحويل مسار)، المرارة، والفتق.",
+            "description_en": "Bariatric surgery, gallbladder, and hernia repairs."
+        },
+        {
+            "slug": "cosmetology",
+            "name_ar": "التجميل والجلدية",
+            "name_en": "Cosmetology",
+            "description_ar": "تجميل الوجه، زراعة الشعر، والعلاجات الجلدية.",
+            "description_en": "Facial aesthetics, hair transplant, and dermatology."
+        },
+        {
+            "slug": "ophthalmology",
+            "name_ar": "طب العيون",
+            "name_en": "Ophthalmology",
+            "description_ar": "تصحح النظر (ليزك)، المياه البيضاء، وعلاج الشبكية.",
+            "description_en": "Vision correction, cataracts, and retina treatment."
+        },
+        {
+            "slug": "neurology",
+            "name_ar": "المخ والأعصاب",
+            "name_en": "Neurology",
+            "description_ar": "علاج الصرع، الجلطات الدماغية، وأورام المخ.",
+            "description_en": "Treatment of epilepsy, strokes, and brain tumors."
         }
     ]
     

@@ -46,9 +46,22 @@ async def home(request: Request):
 async def dashboard(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
+
 @app.get("/treatments", response_class=HTMLResponse)
 async def treatments(request: Request):
-    return templates.TemplateResponse("treatments.html", {"request": request})
+    supabase = get_supabase_client()
+    try:
+        # Fetch ALL specialties for the comprehensive Treatments page
+        response = supabase.table("specialties").select("*").execute()
+        specialties = response.data
+    except Exception as e:
+        print(f"Error fetching specialties for treatments page: {e}")
+        specialties = []
+        
+    return templates.TemplateResponse("treatments.html", {
+        "request": request,
+        "specialties": specialties
+    })
 
 @app.get("/privacy-policy", response_class=HTMLResponse)
 async def privacy_policy(request: Request):

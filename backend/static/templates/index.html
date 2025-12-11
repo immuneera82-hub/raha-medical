@@ -143,6 +143,8 @@
                 </a>
 
                 <div class="hidden md:flex items-center gap-8">
+
+                    <a href="/knowledge-base" class="text-teal-700 hover:text-teal-900 font-bold">الموسوعة الطبية</a>
                     <a href="#hospitals" class="text-gray-600 hover:text-teal-600 font-medium">المستشفيات</a>
                     <a href="#treatments" class="text-gray-600 hover:text-teal-600 font-medium">العلاجات</a>
                     <a href="#consultation" class="text-gray-600 hover:text-teal-600 font-medium">استشارة مجانية</a>
@@ -222,6 +224,9 @@
     <div x-show="mobileMenuOpen" x-collapse x-cloak
         class="md:hidden bg-white border-b border-gray-100 sticky top-[65px] z-40 shadow-lg">
         <div class="container mx-auto px-4 py-4 space-y-4">
+
+            <a href="/knowledge-base" @click="mobileMenuOpen = false"
+                class="block text-teal-700 hover:text-teal-900 font-bold py-2">الموسوعة الطبية</a>
             <a href="#hospitals" @click="mobileMenuOpen = false"
                 class="block text-gray-700 hover:text-teal-600 font-medium py-2">المستشفيات</a>
             <a href="#treatments" @click="mobileMenuOpen = false"
@@ -576,43 +581,36 @@
             <h2 class="text-3xl font-bold text-center mb-4">العلاجات المتاحة</h2>
             <p class="text-gray-600 text-center mb-12">نقدم مجموعة واسعة من العلاجات المتخصصة</p>
 
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow">
-                    <div class="w-14 h-14 bg-pink-100 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-7 h-7 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">أمراض النساء والتوليد</h3>
-                    <p class="text-gray-600">علاج اضطرابات الدورة الشهرية، الأورام الليفية، وجراحات
-                        الرحم</p>
-                </div>
-
-                <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow">
-                    <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">علاج العقم وأطفال الأنابيب</h3>
-                    <p class="text-gray-600">IVF، ICSI، تجميد البويضات، والتلقيح الصناعي</p>
-                </div>
-
-                <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow">
+                {% if specialties %}
+                {% for specialty in specialties %}
+                <a href="/knowledge-base"
+                    class="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-transform hover:-translate-y-1 block h-full">
                     <div class="w-14 h-14 bg-teal-100 rounded-xl flex items-center justify-center mb-4">
                         <svg class="w-7 h-7 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
                             </path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">جراحات الأورام</h3>
-                    <p class="text-gray-600">علاج سرطان الثدي، الرحم، والمبيض بأحدث التقنيات</p>
+                    <h3 class="text-xl font-bold mb-2">{{ specialty.name_ar }}</h3>
+                    <p class="text-gray-600 line-clamp-2 text-sm">{{ specialty.description_ar }}</p>
+                    <div class="mt-4 text-teal-600 font-bold text-sm flex items-center gap-1">
+                        عرض التفاصيل
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                            </path>
+                        </svg>
+                    </div>
+                </a>
+                {% endfor %}
+                {% else %}
+                <!-- Fallback content if DB is empty -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-bold mb-2">جاري تحميل التخصصات...</h3>
                 </div>
+                {% endif %}
             </div>
 
             <!-- View All Treatments Button -->

@@ -21,9 +21,26 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 WATERMARK_LOGO_PATH = STATIC_DIR / "images" / "Raha-Medical-Favicon.png"
 
+
+from backend.database.client import get_supabase_client
+
+# ... (imports)
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    supabase = get_supabase_client()
+    try:
+        # Fetch specialties for the "Treatments" section
+        response = supabase.table("specialties").select("*").limit(9).execute()
+        specialties = response.data
+    except Exception as e:
+        print(f"Error fetching specialties: {e}")
+        specialties = []
+
+    return templates.TemplateResponse("index.html", {
+        "request": request, 
+        "specialties": specialties
+    })
 
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):

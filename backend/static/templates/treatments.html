@@ -113,35 +113,100 @@
                         <div
                             class="w-14 h-14 rounded-xl flex items-center justify-center transition-colors
                                     {% if 'oncology' in specialty.slug %}bg-rose-100 text-rose-600 group-hover:bg-rose-600 group-hover:text-white
-                                    {% elif 'fertility' in specialty.slug %}bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white
-                                    {% elif 'orthopedics' in specialty.slug %}bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white
+                                    {% elif 'fertility' in specialty.slug or 'ivf' in specialty.slug %}bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white
+                                    {% elif 'gynecology' in specialty.slug %}bg-pink-100 text-pink-600 group-hover:bg-pink-600 group-hover:text-white
+                                    {% elif 'orthopedics' in specialty.slug or 'spine' in specialty.slug %}bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white
+                                    {% elif 'card' in specialty.slug %}bg-red-100 text-red-600 group-hover:bg-red-600 group-hover:text-white
+                                    {% elif 'eye' in specialty.slug or 'opht' in specialty.slug %}bg-yellow-100 text-yellow-600 group-hover:bg-yellow-600 group-hover:text-white
+                                    {% elif 'neuro' in specialty.slug %}bg-indigo-100 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white
+                                    {% elif 'cosmet' in specialty.slug %}bg-fuchsia-100 text-fuchsia-600 group-hover:bg-fuchsia-600 group-hover:text-white
+                                    {% elif 'general-surgery' in specialty.slug %}bg-gray-100 text-gray-600 group-hover:bg-gray-600 group-hover:text-white
+                                    {% elif 'urology' in specialty.slug %}bg-blue-200 text-blue-700 group-hover:bg-blue-700 group-hover:text-white
+                                    {% elif 'endo' in specialty.slug %}bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white
                                     {% else %}bg-teal-100 text-teal-600 group-hover:bg-teal-600 group-hover:text-white{% endif %}">
-                            <!-- Dynamic Icon Selection based on slug (Simple mapping) -->
+                            <!-- Dynamic Icon Selection based on slug -->
                             {% if 'oncology' in specialty.slug %}
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
-                                </path>
-                            </svg>
-                            {% elif 'fertility' in specialty.slug or 'ivf' in specialty.slug %}
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197">
-                                </path>
-                            </svg>
-                            {% elif 'orthopedics' in specialty.slug or 'spine' in specialty.slug %}
+                            <!-- Ribbon/Cell -->
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
                                 </path>
                             </svg>
+                            {% elif 'fertility' in specialty.slug or 'ivf' in specialty.slug %}
+                            <!-- Family/Baby -->
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197">
+                                </path>
+                            </svg>
+                            {% elif 'gynecology' in specialty.slug %}
+                            <!-- Female -->
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            {% elif 'orthopedics' in specialty.slug or 'spine' in specialty.slug %}
+                            <!-- Bone/Joint -->
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
                             {% elif 'card' in specialty.slug %}
+                            <!-- Heart -->
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                                 </path>
                             </svg>
+                            {% elif 'eye' in specialty.slug or 'opht' in specialty.slug %}
+                            <!-- Eye -->
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                </path>
+                            </svg>
+                            {% elif 'neuro' in specialty.slug %}
+                            <!-- Brain -->
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
+                                </path>
+                            </svg>
+                            {% elif 'cosmet' in specialty.slug %}
+                            <!-- Face/Sparkle -->
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
+                                </path>
+                            </svg>
+                            {% elif 'general-surgery' in specialty.slug %}
+                            <!-- Scalpel/Cut -->
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z">
+                                </path>
+                            </svg>
+                            {% elif 'urology' in specialty.slug %}
+                            <!-- Kidney/Drop -->
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 21.5c-3.866 0-7-3.134-7-7 0-4.667 7-14.5 7-14.5s7 9.833 7 14.5c0 3.866-3.134 7-7 7z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path>
+                            </svg>
+                            {% elif 'endo' in specialty.slug %}
+                            <!-- Thyroid/Gland/Molecule -->
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                                </path>
+                            </svg>
                             {% else %}
+                            <!-- Generic -->
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">

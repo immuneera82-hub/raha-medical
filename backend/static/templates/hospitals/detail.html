@@ -536,8 +536,15 @@
 
     // Consultation modal functionality
     function showConsultationModal() {
-        // Redirect to contact page with hospital pre-selected
-        window.location.href = `/contact?hospital={{ hospital.slug }}`;
+        // Open WhatsApp with consultation message
+        const hospitalName = "{{ hospital.name_ar }}";
+        const message = encodeURIComponent(`مرحباً، أرغب في حجز استشارة طبية مجانية في ${hospitalName}`);
+        {% if hospital.success_rates and hospital.success_rates.contact and hospital.success_rates.contact.whatsapp %}
+        const whatsappNumber = "{{ hospital.success_rates.contact.whatsapp }}";
+        {% else %}
+        const whatsappNumber = "966500000000";
+        {% endif %}
+        window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
     }
 </script>
 

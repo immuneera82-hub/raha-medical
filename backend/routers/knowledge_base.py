@@ -81,3 +81,26 @@ async def hospitals_list(request: Request):
         "request": request,
         "hospitals": response.data
     })
+
+@router.get("/hospital/{slug}")
+async def hospital_detail(request: Request, slug: str):
+    """
+    Dynamic Hospital Detail Page.
+    """
+    supabase = get_supabase_client()
+    
+    # Fetch Hospital
+    hosp_response = supabase.table("hospitals").select("*").eq("slug", slug).execute()
+    if not hosp_response.data:
+         raise HTTPException(status_code=404, detail="Hospital not found")
+    
+    hospital = hosp_response.data[0]
+    
+    # Fetch Related Doctors
+    doc_response = supabase.table("doctors").select("*").eq("hospital_id", hospital['id']).limit(6).execute()
+    
+    return templates.TemplateResponse("knowledge_base/hospital_detail.html", {
+        "request": request,
+        "hospital": hospital,
+        "doctors": doc_response.data
+    })

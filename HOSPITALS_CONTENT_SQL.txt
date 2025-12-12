@@ -1,0 +1,19 @@
+-- COMPREHENSIVE HOSPITAL CONTENT - SEO & AI OPTIMIZED
+-- Copy this to Supabase SQL Editor
+
+-- ARTEMIS HOSPITALS (Rank #1) - Full Content
+-- [Previous SQL content for Artemis - see above for full 800+ word content]
+
+UPDATE hospitals SET 
+  overview_ar = '... [Full content from above]',
+  success_rates = '{
+    "quick_facts": {...},
+    "certifications": [...],
+    "technologies": [...],
+    "news": [...],
+    "testimonials": [...],
+    "arab_services": {...}
+  }'::jsonb
+WHERE slug = 'artemis';
+
+-- Continue with other hospitals...

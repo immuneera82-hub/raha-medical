@@ -33,13 +33,19 @@ async def home(request: Request):
         # Fetch specialties for the "Treatments" section
         response = supabase.table("specialties").select("*").limit(9).execute()
         specialties = response.data
+        
+        # Fetch Hospitals for the "Partners" section
+        hosp_response = supabase.table("hospitals").select("*").eq("is_partner", True).execute()
+        hospitals = hosp_response.data
     except Exception as e:
-        print(f"Error fetching specialties: {e}")
+        print(f"Error fetching data: {e}")
         specialties = []
+        hospitals = []
 
     return templates.TemplateResponse("index.html", {
         "request": request, 
-        "specialties": specialties
+        "specialties": specialties,
+        "hospitals": hospitals
     })
 
 @app.get("/dashboard", response_class=HTMLResponse)

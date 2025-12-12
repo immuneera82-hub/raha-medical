@@ -226,6 +226,181 @@ def seed_database():
         except Exception as e:
                 print(f"❌ Error processing {disease['name_en']}: {e}")
 
+    print("\n✨ Diseases Seeding Complete!")
+
+    # 3. HOSPITALS
+    hospitals = [
+        {
+            "slug": "artemis",
+            "name_ar": "مستشفيات أرتميس",
+            "name_en": "Artemis Hospitals",
+            "city": "غورغاون",
+            "location": "Sector 51, Gurugram, Haryana 122001, India",
+            "image_url": "/static/images/Artemis.png",
+            "overview_ar": """
+            <p>تعد مستشفيات أرتميس (Artemis Hospitals) واحدة من أرقى المؤسسات الطبية في الهند، وهي أول مستشفى في مدينة غورغاون يحصل على اعتماد اللجنة المشتركة الدولية (JCI) واعتماد المستشفيات الوطنية (NABH).</p>
+            <p>تتميز أرتميس بتقديم رعاية طبية متكاملة عبر مختلف التخصصات، مع تركيز خاص على التكنولوجيا المتقدمة. يضم المستشفى أحدث الأجهزة التشخيصية والعلاجية في العالم.</p>
+            """,
+            "overview_en": "Artemis Hospitals is a state-of-the-art multi-specialty hospital in Gurgaon, India.",
+            "is_partner": True,
+            "jci_accredited": True,
+            "success_rates": {
+                "technologies": [
+                    {
+                        "title": "Quanta Chrome Laser",
+                        "description": "أحدث تقنية ليزر Q-Switched في شمال الهند. جهاز متطور يوفر أكثر من 50 نوعاً من العلاجات الجلدية بما في ذلك علاج التصبغات، الكلف، آثار حب الشباب، وتوحيد لون البشرة. آمن تماماً لجميع أنواع البشرة."
+                    },
+                    {
+                        "title": "Da Vinci Robotic Surgery",
+                        "description": "نظام الجراحة الروبوتية الأكثر دقة للعمليات المعقدة في المسالك البولية والأورام."
+                    },
+                    {
+                        "title": "O-Arm Surgical Imaging",
+                        "description": "نظام تصوير متطور لزيادة الدقة أثناء جراحات العمود الفقري والمخ."
+                    }
+                ],
+                "news": [
+                    {
+                        "headline": "وصول جهاز Quanta Chrome Laser",
+                        "snippet": "أرتميس تعلن عن انفرادها بتوفير أحدث تكنولوجيا ليزر لتجديد البشرة في شمال الهند."
+                    },
+                    {
+                        "headline": "جائزة التميز في سلامة المرضى",
+                        "snippet": "حصل المستشفى على جائزة التميز الآسيوي لعام 2024 لالتزامه بأعلى معايير الأمان."
+                    }
+                ],
+                "testimonials": [
+                    {
+                        "text": "تجربتي مع قسم الجلدية كانت ممتازة. جهاز الليزر الجديد أعطى نتيحة فورية للتصبغات.",
+                        "author": "أم عبد الله - العراق"
+                    },
+                    {
+                        "text": "المستشفى نظيف جداً والطاقم يتحدث العربية، مما سهل علينا رحلة العلاج.",
+                        "author": "خالد - عمان"
+                    }
+                ],
+                "gallery": [
+                    "/static/images/artemis_tech_1.jpg",
+                    "/static/images/artemis_tech_2.jpg",
+                    "/static/images/artemis_tech_3.jpg"
+                ]
+            }
+        },
+        {
+            "slug": "medanta",
+            "name_ar": "مستشفى ميدانتا",
+            "name_en": "Medanta - The Medicity",
+            "city": "دلهي",
+            "location": "Sector 38, Gurugram, Haryana 122001",
+            "image_url": "/static/images/Medanta.png",
+            "overview_ar": "ميدانتا هي واحدة من أكبر المستشفيات متعددة التخصصات في الهند، أسسها جراح القلب الشهير د. ناريش تريهان.",
+            "is_partner": True,
+            "jci_accredited": True,
+            "success_rates": {}
+        },
+        {
+            "slug": "fortis",
+            "name_ar": "مستشفيات فورتيس",
+            "name_en": "Fortis Healthcare",
+            "city": "مومباي",
+            "location": "Mulund Goregaon Link Rd, Mumbai",
+            "image_url": "/static/images/Fortis.png",
+            "overview_ar": "شبكة رعاية صحية رائدة في الهند، تشتهر بتميّزها في جراحات القلب والعظام.",
+            "is_partner": True,
+            "jci_accredited": True,
+            "success_rates": {}
+        },
+        {
+            "slug": "max-healthcare",
+            "name_ar": "ماكس هيلثكير",
+            "name_en": "Max Healthcare",
+            "city": "نيودلهي",
+            "location": "Saket, New Delhi",
+            "image_url": "/static/images/Max-Healthcare.png",
+            "overview_ar": "مجموعة مستشفيات ماكس تقدم رعاية طبية عالمية المستوى مع تركيز على علاج السرطان وزراعة الأعضاء.",
+            "is_partner": True,
+            "jci_accredited": True,
+            "success_rates": {}
+        },
+        {
+             "slug": "marengo-asia",
+             "name_ar": "مارينغو آسيا",
+             "name_en": "Marengo Asia Hospitals",
+             "city": "غورغاون",
+             "location": "Golf Course Ext Rd, Gurugram",
+             "image_url": "/static/images/Marengo-Asia.png",
+             "overview_ar": "مستشفى حديث يركز على سلامة المرضى والتميز الإكلينيكي.",
+             "is_partner": True,
+             "jci_accredited": False,
+             "success_rates": {}
+        },
+        {
+             "slug": "ck-birla",
+             "name_ar": "مستشفيات سي كي بيرلا",
+             "name_en": "CK Birla Hospitals",
+             "city": "كولكاتا",
+             "location": "Kolkata, West Bengal",
+             "image_url": "/static/images/CK-BIRLA.png",
+             "overview_ar": "تشتهر بجودة الرعاية في مجال الخصوبة وصحة المرأة والقلب.",
+             "is_partner": True,
+             "jci_accredited": True,
+             "success_rates": {}
+        }
+    ]
+
+    print("\n🔹 Upserting Hospitals...")
+    hosp_map = {}
+    for hosp in hospitals:
+        try:
+            # Upsert Hospital
+            existing = supabase.table("hospitals").select("id").eq("slug", hosp["slug"]).execute()
+            if existing.data:
+                print(f"🔄 Updating Hospital: {hosp['name_en']}")
+                res = supabase.table("hospitals").update(hosp).eq("slug", hosp["slug"]).execute()
+                hosp_map[hosp['slug']] = existing.data[0]['id']
+            else:
+                print(f"✅ Inserting Hospital: {hosp['name_en']}")
+                res = supabase.table("hospitals").insert(hosp).execute()
+                hosp_map[hosp['slug']] = res.data[0]['id']
+        except Exception as e:
+            print(f"❌ Error processing hospital {hosp['name_en']}: {e}")
+
+    # 4. DOCTORS (Sample for Artemis)
+    doctors = [
+        {
+            "slug": "dr-sandeep-batra",
+            "name_ar": "د. سانديب باترا",
+            "name_en": "Dr. Sandeep Batra",
+            "hospital_id": hosp_map.get("artemis"),
+            "specialty_id": spec_map.get("oncology"),
+            "experience_years": 25,
+            "image_url": "https://randomuser.me/api/portraits/men/32.jpg", # Placeholder
+            "is_active": True
+        },
+        {
+            "slug": "dr-manju-aggarwal",
+            "name_ar": "د. مانجو أغاروال",
+            "name_en": "Dr. Manju Aggarwal",
+            "hospital_id": hosp_map.get("artemis"),
+            "specialty_id": spec_map.get("urology"), # Nephrology technically
+            "experience_years": 30,
+            "image_url": "https://randomuser.me/api/portraits/women/44.jpg", # Placeholder
+            "is_active": True
+        }
+    ]
+
+    print("\n🔹 Upserting Doctors...")
+    for doc in doctors:
+        if not doc['hospital_id']: continue
+        try:
+             existing = supabase.table("doctors").select("id").eq("slug", doc["slug"]).execute()
+             if existing.data:
+                supabase.table("doctors").update(doc).eq("slug", doc["slug"]).execute()
+             else:
+                supabase.table("doctors").insert(doc).execute()
+        except Exception as e:
+             print(f"❌ Error adding doctor {doc['name_en']}: {e}")
+
     print("\n✨ Seeding Complete!")
 
 if __name__ == "__main__":

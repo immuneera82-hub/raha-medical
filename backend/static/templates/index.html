@@ -342,208 +342,89 @@
                 الهند لضمان حصولك على أفضل رعاية طبية</p>
         </div>
 
-        <!-- Seamless Marquee -->
-        <div class="marquee-container py-4">
-            <div class="marquee-track">
-                <!-- Hospital 1 -->
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Medanta.png" alt="Medanta"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">ميدانتا</span>
-                        <span class="text-gray-500 text-xs">دلهي</span>
+        <!-- Responsive Hospitals Section -->
+        <div class="py-6">
+
+            <!-- Mobile: Marquee (Scrolling Right) (md:hidden) -->
+            <div class="md:hidden marquee-container overflow-hidden py-4">
+                <div class="marquee-track flex gap-4 animate-scroll-right">
+                    {% if hospitals %}
+                    <!-- Original Set -->
+                    {% for hospital in hospitals %}
+                    <div class="marquee-item flex-shrink-0 w-52">
+                        <a href="/knowledge-base/hospital/{{ hospital.slug }}" class="block h-full">
+                            <div
+                                class="hospital-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col items-center justify-center h-48 hover:shadow-md transition">
+                                <img src="{{ hospital.image_url }}" alt="{{ hospital.name_ar }}"
+                                    class="hospital-logo h-16 object-contain mb-3">
+                                <span class="text-gray-800 font-bold text-sm text-center line-clamp-1">{{
+                                    hospital.name_ar }}</span>
+                                <span class="text-gray-500 text-xs">{{ hospital.city }}</span>
+                            </div>
+                        </a>
                     </div>
-                </div>
-                <!-- Hospital 2 -->
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/CK-BIRLA.png" alt="CK Birla"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">سي كي بيرلا</span>
-                        <span class="text-gray-500 text-xs">كولكاتا</span>
+                    {% endfor %}
+                    <!-- Duplicate Set for Seamless Loop -->
+                    {% for hospital in hospitals %}
+                    <div class="marquee-item flex-shrink-0 w-52" aria-hidden="true">
+                        <a href="/knowledge-base/hospital/{{ hospital.slug }}" class="block h-full">
+                            <div
+                                class="hospital-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col items-center justify-center h-48">
+                                <img src="{{ hospital.image_url }}" alt="{{ hospital.name_ar }}"
+                                    class="hospital-logo h-16 object-contain mb-3">
+                                <span class="text-gray-800 font-bold text-sm text-center line-clamp-1">{{
+                                    hospital.name_ar }}</span>
+                                <span class="text-gray-500 text-xs">{{ hospital.city }}</span>
+                            </div>
+                        </a>
                     </div>
-                </div>
-                <!-- Hospital 3 -->
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Marengo-Asia.png" alt="Marengo Asia"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">مارينغو آسيا</span>
-                        <span class="text-gray-500 text-xs">غورغاون</span>
-                    </div>
-                </div>
-                <!-- Hospital 4 -->
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Fortis.png" alt="Fortis"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">فورتيس</span>
-                        <span class="text-gray-500 text-xs">مومباي</span>
-                    </div>
-                </div>
-                <!-- Hospital 5 -->
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Artemis.png" alt="Artemis"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">أرتميس</span>
-                        <span class="text-gray-500 text-xs">غورغاون</span>
-                    </div>
-                </div>
-                <!-- Hospital 6 -->
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Max-Healthcare.png" alt="Max Healthcare"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">ماكس هيلثكير</span>
-                        <span class="text-gray-500 text-xs">نيودلهي</span>
-                    </div>
-                </div>
-                <!-- Hospital 7 -->
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/sci-logo.png" alt="SCI IVF"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">SCI IVF</span>
-                        <span class="text-gray-500 text-xs">نيودلهي</span>
-                    </div>
-                </div>
-                <!-- Duplicate for seamless loop -->
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Medanta.png" alt="Medanta"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">ميدانتا</span>
-                        <span class="text-gray-500 text-xs">دلهي</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/CK-BIRLA.png" alt="CK Birla"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">سي كي بيرلا</span>
-                        <span class="text-gray-500 text-xs">كولكاتا</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Marengo-Asia.png" alt="Marengo Asia"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">مارينغو آسيا</span>
-                        <span class="text-gray-500 text-xs">غورغاون</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Fortis.png" alt="Fortis"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">فورتيس</span>
-                        <span class="text-gray-500 text-xs">مومباي</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Artemis.png" alt="Artemis"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">أرتميس</span>
-                        <span class="text-gray-500 text-xs">غورغاون</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Max-Healthcare.png" alt="Max Healthcare"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">ماكس هيلثكير</span>
-                        <span class="text-gray-500 text-xs">نيودلهي</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/sci-logo.png" alt="SCI IVF"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">SCI IVF</span>
-                        <span class="text-gray-500 text-xs">نيودلهي</span>
-                    </div>
-                </div>
-                <!-- Third duplicate for extra seamless loop -->
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Medanta.png" alt="Medanta"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">ميدانتا</span>
-                        <span class="text-gray-500 text-xs">دلهي</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/CK-BIRLA.png" alt="CK Birla"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">سي كي بيرلا</span>
-                        <span class="text-gray-500 text-xs">كولكاتا</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Marengo-Asia.png" alt="Marengo Asia"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">مارينغو آسيا</span>
-                        <span class="text-gray-500 text-xs">غورغاون</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Fortis.png" alt="Fortis"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">فورتيس</span>
-                        <span class="text-gray-500 text-xs">مومباي</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Artemis.png" alt="Artemis"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">أرتميس</span>
-                        <span class="text-gray-500 text-xs">غورغاون</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/Max-Healthcare.png" alt="Max Healthcare"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">ماكس هيلثكير</span>
-                        <span class="text-gray-500 text-xs">نيودلهي</span>
-                    </div>
-                </div>
-                <div class="marquee-item">
-                    <div
-                        class="hospital-card bg-white rounded-2xl p-5 shadow-md border border-gray-100 flex flex-col items-center justify-center h-40">
-                        <img src="/static/images/sci-logo.png" alt="SCI IVF"
-                            class="hospital-logo h-14 object-contain mb-3">
-                        <span class="text-gray-800 font-bold text-sm">SCI IVF</span>
-                        <span class="text-gray-500 text-xs">نيودلهي</span>
-                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="p-4 text-center text-gray-400 w-full">جاري تحميل المستشفيات...</div>
+                    {% endif %}
                 </div>
             </div>
+
+            <!-- Desktop: Static Row (Fixed) (hidden md:flex) -->
+            <div class="hidden md:flex flex-wrap justify-center items-center gap-8 container mx-auto px-4 py-8">
+                {% if hospitals %}
+                {% for hospital in hospitals %}
+                <a href="/knowledge-base/hospital/{{ hospital.slug }}"
+                    class="group bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center w-56 h-56 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 transform">
+                    <img src="{{ hospital.image_url }}" alt="{{ hospital.name_ar }}"
+                        class="h-20 object-contain mb-4 filter grayscale group-hover:grayscale-0 transition duration-300">
+                    <h3 class="font-bold text-gray-800 text-center mb-1 group-hover:text-teal-600 transition">{{
+                        hospital.name_ar }}</h3>
+                    <p class="text-xs text-gray-500">{{ hospital.city }}</p>
+                </a>
+                {% endfor %}
+                {% else %}
+                <!-- Fallback Static (Just in case DB empty during dev) -->
+                <div class="text-center text-gray-400">لا توجد بيانات مستشفيات حالياً.</div>
+                {% endif %}
+            </div>
+
+            <style>
+                @keyframes scrollRight {
+                    0% {
+                        transform: translateX(-50%);
+                    }
+
+                    100% {
+                        transform: translateX(0);
+                    }
+                }
+
+                .animate-scroll-right {
+                    display: flex;
+                    width: max-content;
+                    animation: scrollRight 40s linear infinite;
+                }
+
+                .marquee-track:hover {
+                    animation-play-state: paused;
+                }
+            </style>
         </div>
 
         <!-- Trust Badges -->

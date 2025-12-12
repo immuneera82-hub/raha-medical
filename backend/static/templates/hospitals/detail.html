@@ -283,7 +283,7 @@
                 {% endif %}
 
                 <!-- Gallery -->
-                {% if hospital.success_rates.gallery %}
+                {% if hospital.success_rates and hospital.success_rates.gallery %}
                 <section class="bg-white rounded-2xl p-8 shadow-sm">
                     <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                         <span class="w-1.5 h-10 bg-teal-500 rounded-full"></span>
@@ -291,11 +291,14 @@
                     </h2>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {% for img in hospital.success_rates.gallery %}
-                        <div class="rounded-xl overflow-hidden shadow-md h-48 group cursor-pointer">
+                        <a href="{{ img }}"
+                            class="glightbox rounded-xl overflow-hidden shadow-md h-48 group cursor-pointer block"
+                            data-gallery="hospital-gallery" data-title="{{ hospital.name_ar }} - صورة {{ loop.index }}"
+                            data-description="معرض صور {{ hospital.name_ar }}">
                             <img src="{{ img }}"
                                 class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500"
-                                alt="Hospital Gallery">
-                        </div>
+                                alt="{{ hospital.name_ar }} - {{ loop.index }}" loading="lazy" width="400" height="300">
+                        </a>
                         {% endfor %}
                     </div>
                 </section>
@@ -395,6 +398,16 @@
                 <!-- Location Map -->
                 <div class="bg-white rounded-2xl p-6 shadow-sm">
                     <h3 class="font-bold text-gray-900 mb-4 text-lg">📍 الموقع والعنوان</h3>
+
+                    {% if hospital.google_maps_url %}
+                    <!-- Google Maps Embed -->
+                    <div class="rounded-xl overflow-hidden mb-4 shadow-md">
+                        <iframe src="{{ hospital.google_maps_url }}" class="w-full h-64" style="border:0;"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    {% else %}
+                    <!-- Fallback placeholder -->
                     <div class="bg-gray-200 h-48 rounded-xl flex items-center justify-center text-gray-500 mb-4">
                         <span class="flex items-center gap-2">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -402,12 +415,15 @@
                                     d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
                                 </path>
                             </svg>
-                            خريطة جوجل (قريباً)
+                            خريطة جوجل
                         </span>
                     </div>
-                    <p class="text-sm text-gray-700 leading-relaxed">{{ hospital.location }}</p>
+                    {% endif %}
+
+                    <p class="text-sm text-gray-700 leading-relaxed mb-3">{{ hospital.location }}</p>
+
                     {% if hospital.website_url %}
-                    <a href="{{ hospital.website_url }}" target="_blank"
+                    <a href="{{ hospital.website_url }}" target="_blank" rel="noopener noreferrer"
                         class="block mt-4 text-center bg-teal-50 text-teal-700 py-2 rounded-lg hover:bg-teal-100 transition font-semibold">
                         🌐 زيارة الموقع الرسمي
                     </a>
@@ -443,11 +459,11 @@
                     id="consultation">
                     <h3 class="text-xl font-bold mb-3">📞 احجز استشارتك المجانية</h3>
                     <p class="text-teal-100 text-sm mb-4">تواصل معنا للحصول على استشارة طبية مجانية مع أفضل الأطباء</p>
-                    <button
+                    <button onclick="showConsultationModal()"
                         class="w-full bg-white text-teal-700 px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition shadow-lg mb-3">
                         استشارة مجانية
                     </button>
-                    <button
+                    <button onclick="openWhatsApp()"
                         class="w-full border-2 border-white text-white px-6 py-3 rounded-lg font-bold hover:bg-teal-600 transition">
                         تواصل عبر واتساب
                     </button>
@@ -472,7 +488,7 @@
     "addressCountry": "IN",
     "streetAddress": "{{ hospital.location }}"
   },
-  "telephone": "{{ hospital.success_rates.contact.phone_india if hospital.success_rates.contact else '' }}",
+  "telephone": "{{ hospital.success_rates.contact.phone_india if hospital.success_rates and hospital.success_rates.contact else '' }}",
   "url": "{{ hospital.website_url }}",
   {% if hospital.jci_accredited %}
   "accreditation": {
@@ -482,7 +498,7 @@
   {% endif %}
   "availableLanguage": ["ar", "en", "hi"],
   "medicalSpecialty": [
-    {% if hospital.success_rates.centers_of_excellence %}
+    {% if hospital.success_rates and hospital.success_rates.centers_of_excellence %}
     {% for center in hospital.success_rates.centers_of_excellence %}
     "{{ center.name_en }}"{% if not loop.last %},{% endif %}
     {% endfor %}
@@ -490,4 +506,59 @@
   ]
 }
 </script>
+
+<!-- GLightbox CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.2.0/dist/css/glightbox.min.css">
+
+<!-- GLightbox JS -->
+<script src="https://cdn.jsdelivr.net/npm/glightbox@3.2.0/dist/js/glightbox.min.js"></script>
+
+<script>
+    // Initialize GLightbox for image gallery
+    const lightbox = GLightbox({
+        selector: '.glightbox',
+        touchNavigation: true,
+        loop: true,
+        autoplayVideos: true
+    });
+
+    // WhatsApp button functionality
+    function openWhatsApp() {
+        const hospitalName = "{{ hospital.name_ar }}";
+        const message = encodeURIComponent(`مرحباً، أرغب في الاستفسار عن ${hospitalName}`);
+        {% if hospital.success_rates and hospital.success_rates.contact and hospital.success_rates.contact.whatsapp %}
+        const whatsappNumber = "{{ hospital.success_rates.contact.whatsapp }}";
+        {% else %}
+        const whatsappNumber = "966500000000"; // Default number
+        {% endif %}
+        window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+    }
+
+    // Consultation modal functionality
+    function showConsultationModal() {
+        // Redirect to contact page with hospital pre-selected
+        window.location.href = `/contact?hospital={{ hospital.slug }}`;
+    }
+</script>
+
+<style>
+    /* Enhanced image gallery styles */
+    .glightbox {
+        cursor: zoom-in;
+    }
+
+    .glightbox:hover {
+        opacity: 0.9;
+    }
+
+    /* Custom GLightbox theme matching site colors */
+    .goverlay {
+        background: rgba(0, 0, 0, 0.95) !important;
+    }
+
+    .gcontainer .gslide-description {
+        background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.75));
+    }
+</style>
+
 {% endblock %}

@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 import os
 from pathlib import Path
-from backend.database.supabase_client import get_supabase_client
+from backend.database.client import get_supabase_client
 
 router = APIRouter(prefix="/hospitals", tags=["hospitals"])
 

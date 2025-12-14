@@ -72,15 +72,10 @@ async def doctor_detail(request: Request, slug: str):
 @router.get("/hospitals")
 async def hospitals_list(request: Request):
     """
-    List of partner hospitals.
+    Redirect old hospitals list to new location.
     """
-    supabase = get_supabase_client()
-    response = supabase.table("hospitals").select("*").eq("is_partner", True).execute()
-    
-    return templates.TemplateResponse("knowledge_base/hospitals_list.html", {
-        "request": request,
-        "hospitals": response.data
-    })
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/hospitals", status_code=301)
 
 @router.get("/hospital/{slug}")
 async def hospital_detail_redirect(slug: str):

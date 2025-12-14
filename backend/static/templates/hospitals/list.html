@@ -1,0 +1,70 @@
+{% extends "knowledge_base/base.html" %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen pb-20">
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-teal-900 to-teal-700 text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">شبكة المستشفيات المعتمدة</h1>
+            <p class="text-xl text-teal-100 max-w-2xl mx-auto">
+                نقدم لك نخبة من أفضل المستشفيات في الهند، معتمدة دولياً ومجهزة بأحدث التقنيات لعلاج الحالات المعقدة.
+            </p>
+        </div>
+    </div>
+
+    <!-- Hospitals List -->
+    <div class="container mx-auto px-4 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for hospital in hospitals %}
+            <a href="/hospitals/{{ hospital.slug }}" class="group block h-full">
+                <div
+                    class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col border border-gray-100 group-hover:border-teal-200">
+                    <!-- Image -->
+                    <div class="h-56 bg-gray-200 overflow-hidden relative">
+                        <img src="{{ hospital.image_url }}" alt="{{ hospital.name_ar }}"
+                            class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        {% if hospital.jci_accredited %}
+                        <div
+                            class="absolute top-4 right-4 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
+                            <span>★</span> JCI معتمد
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Content -->
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="mb-4">
+                            <h2 class="text-2xl font-bold text-gray-900 group-hover:text-teal-600 transition mb-2">{{
+                                hospital.name_ar }}</h2>
+                            <p class="text-sm text-gray-500 flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                    </path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                {{ hospital.city }}
+                            </p>
+                        </div>
+
+                        <p class="text-gray-600 text-sm line-clamp-3 mb-6 flex-1">
+                            {{ hospital.overview_ar|striptags }}
+                        </p>
+
+                        <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 text-sm">
+                            <span class="text-teal-600 font-bold group-hover:underline">عرض التفاصيل &larr;</span>
+                            {% if hospital.is_partner %}
+                            <span class="text-green-600 bg-green-50 px-3 py-1 rounded-full text-xs font-semibold">شريك
+                                مميز</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

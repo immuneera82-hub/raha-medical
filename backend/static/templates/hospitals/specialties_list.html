@@ -1,0 +1,60 @@
+{% extends "knowledge_base/base.html" %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen pb-20">
+
+    <!-- Hero Section -->
+    <div class="relative bg-gradient-to-r from-teal-900 to-teal-700 text-white py-16 overflow-hidden">
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">الأقسام والتخصصات الطبية</h1>
+            <p class="text-xl text-teal-100">تميز طبي ورعاية فائقة في {{ hospital.name_ar }}</p>
+            <a href="/hospitals/{{ hospital.slug }}"
+                class="inline-block mt-6 text-white border border-white px-6 py-2 rounded-full hover:bg-white hover:text-teal-800 transition">
+                &larr; العودة للمستشفى
+            </a>
+        </div>
+    </div>
+
+    <!-- Specialties Grid -->
+    <div class="container mx-auto px-4 py-12">
+        {% if specialties %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for center in specialties %}
+            <a href="/hospitals/{{ hospital.slug }}/specialties/{{ center.name_en|lower|replace(' ', '-') }}"
+                class="group block h-full">
+                <div
+                    class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition h-full border border-gray-100 group-hover:border-teal-200">
+                    <div
+                        class="h-48 bg-teal-50 flex items-center justify-center text-6xl group-hover:scale-110 transition duration-500">
+                        {% if center.icon == 'heart' %}❤️
+                        {% elif center.icon == 'ribbon' %}🎗️
+                        {% elif center.icon == 'bone' %}🦴
+                        {% elif center.icon == 'baby' %}👶
+                        {% else %}🏥{% endif %}
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition">{{
+                            center.name_ar }}</h3>
+                        <p class="text-gray-600 line-clamp-3 mb-4">{{ center.description }}</p>
+                        <span class="text-teal-600 font-bold flex items-center gap-2">
+                            اقرأ المزيد
+                            <svg class="w-4 h-4 text-teal-600 rtl:rotate-180" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-20">
+            <p class="text-xl text-gray-600">عذراً، لا توجد تخصصات مسجلة لهذا المستشفى حالياً.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

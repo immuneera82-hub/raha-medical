@@ -1,0 +1,29 @@
+-- ✅ تحديث بيانات Artemis Hospital
+
+-- 1️⃣ إضافة Google Maps URL
+UPDATE hospitals 
+SET google_maps_url = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3507.716980984494!2d77.08421631506014!3d28.431684182490744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d18c0f23ec663%3A0xf187aeba7fc5e7a1!2sArtemis%20Hospitals!5e0!3m2!1sen!2sin!4v1702377000000!5m2!1sen!2sin'
+WHERE slug = 'artemis';
+
+-- 2️⃣ إضافة رقم WhatsApp في contact
+UPDATE hospitals 
+SET success_rates = jsonb_set(
+  COALESCE(success_rates, '{}'::jsonb),
+  '{contact}',
+  '{
+    "phone_india": "+911244511111",
+    "phone_international": "+911244511111",
+    "whatsapp": "911244511111",
+    "email": "international@artemishospitals.com"
+  }'::jsonb
+)
+WHERE slug = 'artemis';
+
+-- 3️⃣ التحقق من التحديث
+SELECT 
+  slug, 
+  name_ar,
+  google_maps_url,
+  success_rates->'contact'->>'whatsapp' as whatsapp
+FROM hospitals 
+WHERE slug = 'artemis';

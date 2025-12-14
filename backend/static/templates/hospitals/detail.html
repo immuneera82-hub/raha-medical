@@ -54,6 +54,10 @@
                         class="border-2 border-white text-white px-6 py-3 rounded-xl font-bold hover:bg-teal-600 transition text-center cursor-pointer">
                         💬 واتساب
                     </button>
+                    <a href="/hospitals/{{ hospital.slug }}/specialties"
+                        class="bg-teal-800 text-teal-100 px-6 py-3 rounded-xl font-bold hover:bg-teal-900 transition text-center cursor-pointer border border-teal-600">
+                        🏥 التخصصات
+                    </a>
                 </div>
             </div>
         </div>
@@ -168,31 +172,36 @@
                     </h2>
                     <div class="space-y-6">
                         {% for center in hospital.success_rates.centers_of_excellence %}
-                        <div
-                            class="border-2 border-gray-100 rounded-xl p-6 hover:border-teal-300 hover:shadow-lg transition">
-                            <div class="flex items-start gap-4">
-                                <div
-                                    class="w-14 h-14 bg-teal-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                    <span class="text-3xl">
-                                        {% if center.icon == 'heart' %}❤️
-                                        {% elif center.icon == 'ribbon' %}🎗️
-                                        {% elif center.icon == 'bone' %}🦴
-                                        {% elif center.icon == 'baby' %}👶
-                                        {% else %}🏥{% endif %}
-                                    </span>
-                                </div>
-                                <div class="flex-1">
-                                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ center.name_ar }}</h3>
-                                    <p class="text-teal-700 font-semibold mb-3">{{ center.description }}</p>
-                                    <div class="flex flex-wrap gap-2">
-                                        {% for treatment in center.treatments %}
-                                        <span class="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-sm">{{
-                                            treatment }}</span>
-                                        {% endfor %}
+                        <a
+                            href="/hospitals/{{ hospital.slug }}/specialties/{{ center.name_en|lower|replace(' ', '-') }}">
+                            <div
+                                class="border-2 border-gray-100 rounded-xl p-6 hover:border-teal-300 hover:shadow-lg transition cursor-pointer group">
+                                <div class="flex items-start gap-4">
+                                    <div
+                                        class="w-14 h-14 bg-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition">
+                                        <span class="text-3xl">
+                                            {% if center.icon == 'heart' %}❤️
+                                            {% elif center.icon == 'ribbon' %}🎗️
+                                            {% elif center.icon == 'bone' %}🦴
+                                            {% elif center.icon == 'baby' %}👶
+                                            {% else %}🏥{% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3
+                                            class="text-xl font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition">
+                                            {{ center.name_ar }}</h3>
+                                        <p class="text-teal-700 font-semibold mb-3">{{ center.description }}</p>
+                                        <div class="flex flex-wrap gap-2">
+                                            {% for treatment in center.treatments %}
+                                            <span class="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-sm">{{
+                                                treatment }}</span>
+                                            {% endfor %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         {% endfor %}
                     </div>
                 </section>
@@ -456,7 +465,7 @@
 
                 <!-- CTA Card -->
                 <div class="bg-gradient-to-br from-teal-700 to-teal-900 text-white rounded-2xl p-6 shadow-xl"
-                    id="consultation">
+                    id="contact">
                     <h3 class="text-xl font-bold mb-3">📞 احجز استشارتك المجانية</h3>
                     <p class="text-teal-100 text-sm mb-4">تواصل معنا للحصول على استشارة طبية مجانية مع أفضل الأطباء</p>
                     <button onclick="showConsultationModal()"

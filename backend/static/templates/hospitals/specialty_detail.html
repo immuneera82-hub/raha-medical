@@ -168,11 +168,7 @@
         const hospitalName = "{{ hospital.name_ar }}";
         const specialty = "{{ local_specialty.name_ar if local_specialty else global_specialty.name_ar }}";
         const message = encodeURIComponent(`مرحباً، أرغب في الاستفسار عن علاج ${specialty} في ${hospitalName}`);
-        {% if hospital.success_rates and hospital.success_rates.contact and hospital.success_rates.contact.whatsapp %}
-        const whatsappNumber = "{{ hospital.success_rates.contact.whatsapp }}";
-        {% else %}
-        const whatsappNumber = "966500000000";
-        {% endif %}
+        const whatsappNumber = "919217286505";
         window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
     }
 </script>

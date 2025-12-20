@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./backend/static:/app/static
+      - ./backend/static:/app/backend/static
 
   caddy:
     image: caddy:latest
